@@ -37,6 +37,11 @@ struct chromo_t {
 	port_t *outputs;
 };
 
+struct chromo_t *chromo_at(struct chromo_t *list, size_t i)
+{
+	return list + i;
+}
+
 struct chromo_t *chromo_alloc(size_t count)
 {
 	struct chromo_t *c = NULL;
@@ -47,7 +52,6 @@ void chromo_free(struct chromo_t *c)
 {
 	if(c != NULL) {
 		free(c);
-		c->g = NULL;
 	}
 }
 
