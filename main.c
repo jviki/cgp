@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	cgp_walk_popul(&cgp, , NULL);
+	cgp_walk_popul(&cgp, &print_chromo, NULL);
 	cgp_fini(&cgp);
 	return 0;
 
