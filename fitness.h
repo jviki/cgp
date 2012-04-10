@@ -13,6 +13,8 @@
  */
 typedef size_t fitness_t;
 
+#define FITNESS_FMT "%z"
+
 /**
  * Computes fitness for the given chromosome.
  */
