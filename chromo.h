@@ -7,6 +7,7 @@
 #define CHROMO_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * Chromosome abstraction.
@@ -33,5 +34,10 @@ void chromo_gen(struct chromo_t *c);
  * Mutates the given chromosome.
  */
 void chromo_mut(struct chromo_t *c);
+
+/**
+ * Prints the chromosome to the given stream.
+ */
+void chromo_print(FILE *fout, const struct chromo_t *c);
 
 #endif
