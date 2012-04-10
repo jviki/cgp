@@ -20,4 +20,9 @@ typedef size_t fitness_t;
  */
 fitness_t fitness_compute(const struct chromo_t *c);
 
+/**
+ * Returns true when the given fitness value is the best possible.
+ */
+int fitness_isbest(fitness_t f);
+
 #endif
