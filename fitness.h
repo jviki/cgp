@@ -18,7 +18,7 @@ typedef size_t fitness_t;
 /**
  * Computes fitness for the given chromosome.
  */
-fitness_t fitness_compute(const struct chromo_t *c);
+int fitness_compute(const struct chromo_t *c, fitness_t *value);
 
 /**
  * Returns true when the given fitness value is the best possible.
