@@ -26,6 +26,11 @@ struct chromo_t *chromo_alloc(size_t count);
 void chromo_free(struct chromo_t *c);
 
 /**
+ * Returns i-th chromosome in the list.
+ */
+struct chromo_t *chromo_at(struct chromo_t *list, size_t i);
+
+/**
  * Generates a random chromosome.
  */
 void chromo_gen(struct chromo_t *c);
