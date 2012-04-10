@@ -6,21 +6,24 @@
 #ifndef CGP_H
 #define CGP_H
 
+#include "chromo.h"
 #include <stdlib.h>
 
 /**
- * Configuration of the CGP.
- * Consists of:
- *  w       ... number of elements (width)
- *  h       ... number of elements (height)
- *  l       ... L back parameter
- *  gen_cnt ... count of generations
+ * CGP state.
  */
 struct cgp_t {
-	size_t w;
-	size_t h;
-	size_t l;
-	size_t gen_cnt;
+	struct chromo_t *c;
 };
+
+/**
+ * Generates a population at random.
+ */
+int cgp_gen_popul(struct cgp_t *cgp);
+
+/**
+ * Generates next population.
+ */
+int cgp_next_popul(struct cgp_t *cgp);
 
 #endif
