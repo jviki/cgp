@@ -16,6 +16,7 @@
 struct cgp_t {
 	struct chromo_t *c;
 	fitness_t *f;
+	size_t gener;
 };
 
 /**
