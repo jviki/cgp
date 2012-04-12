@@ -44,13 +44,34 @@ port_t *impl_outputs_alloc(size_t count)
 
 struct chromo_t *chromo_alloc(size_t count)
 {
-	struct chromo_t *c = NULL;
+	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
+	const size_t inputs = cells * func_inputs_max();
+
+	if(count == 0)
+		return NULL;
+
+	struct chromo_t *c = impl_chromos_alloc(count);
+	struct cell_t *all_cells = impl_cells_alloc(count);
+	port_t *all_inputs = impl_inputs_alloc(count);
+	port_t *all_outputs = impl_outputs_alloc(count);
+
+	for(size_t i = 0; i < count; ++i) {
+		c[i].cell = all_cells + (i * cells);
+		c[i].outputs = all_outputs + (i * CGP_OUTPUTS);
+
+		for(size_t j = 0; j < cells; ++j)
+			c[i].cell[j].inputs = all_inputs + (i * inputs) + (j * func_inputs_max());
+	}
+
 	return c;
 }
 
 void chromo_free(struct chromo_t *c)
 {
 	if(c != NULL) {
+		free(c->cell->inputs);
+		free(c->cell);
+		free(c->outputs);
 		free(c);
 	}
 }
