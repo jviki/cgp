@@ -9,6 +9,7 @@
 #include "cgp_config.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 struct chromo_t *chromo_at(struct chromo_t *list, size_t i)
 {
@@ -78,7 +79,14 @@ void chromo_free(struct chromo_t *c)
 
 void chromo_gen(struct chromo_t *c)
 {
+	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
 
+	for(size_t i = 0; i < cells; ++i) {
+		c->cell[i].f = 0;
+		memset(c->cell[i].inputs, 0, sizeof(port_t) * func_inputs_max());
+	}
+
+	memset(c->outputs, 0, sizeof(port_t) * CGP_OUTPUTS);
 }
 
 void chromo_mut(struct chromo_t *c)
