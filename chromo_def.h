@@ -7,11 +7,12 @@
 #define CHROMO_DEF_H
 
 #include "func.h"
+#include <stdlib.h>
 
 /**
  * Id of connected port.
  */
-typedef int port_t;
+typedef size_t port_t;
 
 /**
  * Representation of one cell in the CGP matrix.
