@@ -9,12 +9,12 @@
 /**
  * Functions available for each CGP computation unit.
  */
-enum func_t;
+typedef int func_t;
 
 /**
  * String representation of the function.
  */
-const char *func_to_str(enum func_t f);
+const char *func_to_str(func_t f);
 
 /**
  * Returns maximal number of inputs from all functions.

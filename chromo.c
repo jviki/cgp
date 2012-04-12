@@ -18,7 +18,7 @@ typedef int port_t;
  * Representation of one cell in the CGP matrix.
  */
 struct cell_t {
-	enum func_t f;
+	func_t f;
 	port_t *inputs;
 };
 

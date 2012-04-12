@@ -18,15 +18,15 @@ size_t func_outputs_max(void)
 /**
  * Available functions.
  */
-enum func_t {
+enum func_enum_t {
 	F_AND,
 	F_OR,
 	F_XOR
 };
 
-const char *func_to_str(enum func_t f)
+const char *func_to_str(func_t f)
 {
-	switch(f) {
+	switch((enum func_enum_t) f) {
 	case F_AND:
 		return "AND";
 	case F_OR:
