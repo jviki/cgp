@@ -6,6 +6,7 @@
 #include "chromo.h"
 #include "cgp_config.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * Id of connected port.
@@ -81,4 +82,19 @@ void chromo_gen(struct chromo_t *c)
 void chromo_mut(struct chromo_t *c)
 {
 
+}
+
+void chromo_print(FILE *fout, const struct chromo_t *c)
+{
+	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
+		const struct cell_t *cell = c->cell + i;
+
+		for(size_t j = 0; j < FUNC_INPUTS; ++j)
+			fprintf(fout, "%d ", cell->inputs[j]);
+
+		fprintf(fout, "%s ", func_to_str(cell->f));
+	}
+
+	for(size_t j = 0; j < CGP_OUTPUTS; ++j)
+		fprintf(fout, "%d ", c->outputs[j]);
 }
