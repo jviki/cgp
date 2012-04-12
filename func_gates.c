@@ -5,8 +5,15 @@
 
 #include "func.h"
 
-#define FUNC_INPUTS  2
-#define FUNC_OUTPUTS 1
+size_t func_inputs_max(void)
+{
+	return 2;
+}
+
+size_t func_outputs_max(void)
+{
+	return 1;
+}
 
 /**
  * Available functions.

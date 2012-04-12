@@ -63,7 +63,7 @@ void chromo_print(FILE *fout, const struct chromo_t *c)
 	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
 		const struct cell_t *cell = c->cell + i;
 
-		for(size_t j = 0; j < FUNC_INPUTS; ++j)
+		for(size_t j = 0; j < func_inputs_max(); ++j)
 			fprintf(fout, "%d ", cell->inputs[j]);
 
 		fprintf(fout, "%s ", func_to_str(cell->f));

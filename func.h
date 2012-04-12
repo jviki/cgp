@@ -16,5 +16,15 @@ enum func_t;
  */
 const char *func_to_str(enum func_t f);
 
+/**
+ * Returns maximal number of inputs from all functions.
+ */
+size_t func_inputs_max(void);
+
+/**
+ * Returns maximal number of outputs from all functions.
+ */
+size_t func_outputs_max(void);
+
 #endif
 
