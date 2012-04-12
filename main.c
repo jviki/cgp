@@ -20,7 +20,7 @@ void print_chromo(const struct chromo_t *c, fitness_t f, void *ctx)
 	if(fitness_isbest(f)) {
 		printf(FITNESS_FMT "\t", f);
 		chromo_print(stdout, c);
-		puts("\n");
+		fputc('\n', stdout);
 	}
 }
 
