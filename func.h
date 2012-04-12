@@ -6,6 +6,8 @@
 #ifndef FUNC_H
 #define FUNC_H
 
+#include <stdlib.h>
+
 /**
  * Functions available for each CGP computation unit.
  */
