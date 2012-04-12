@@ -12,6 +12,9 @@
  */
 typedef int port_t;
 
+#define FUNC_INPUTS  2
+#define FUNC_OUTPUTS 1
+
 /**
  * Available functions.
  */
