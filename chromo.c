@@ -139,13 +139,14 @@ void chromo_print(FILE *fout, const struct chromo_t *c)
 {
 	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
 		const struct cell_t *cell = c->cell + i;
+		fprintf(fout, "(%zu [%zu, %zu]: ", i, i / CGP_HEIGHT, i % CGP_HEIGHT);
 
 		for(size_t j = 0; j < func_inputs_max(); ++j)
-			fprintf(fout, "%d ", cell->inputs[j]);
+			fprintf(fout, "%zu ", cell->inputs[j]);
 
-		fprintf(fout, "%s ", func_to_str(cell->f));
+		fprintf(fout, "%s) ", func_to_str(cell->f));
 	}
 
 	for(size_t j = 0; j < CGP_OUTPUTS; ++j)
-		fprintf(fout, "%d ", c->outputs[j]);
+		fprintf(fout, "%zu ", c->outputs[j]);
 }
