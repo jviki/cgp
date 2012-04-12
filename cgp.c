@@ -55,6 +55,7 @@ int cgp_done(const struct cgp_t *cgp)
 
 int cgp_next_popul(struct cgp_t *cgp)
 {
+	cgp->gener += 1;
 	return 0;
 }
 
