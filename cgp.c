@@ -9,16 +9,15 @@
 
 int cgp_init(struct cgp_t *cgp)
 {
-	const size_t units = CGP_WIDTH * CGP_HEIGHT; 
 	cgp->gener = 0;
-	cgp->c = chromo_alloc(units);
+	cgp->c = chromo_alloc(CGP_POPUL);
 
 	if(cgp->c == NULL)
 		return 1;
 
-	cgp->f = malloc(units * sizeof(fitness_t));
+	cgp->f = malloc(CGP_POPUL * sizeof(fitness_t));
 	if(cgp->f == NULL) {
-		free(cgp->c);
+		chromo_free(cgp->c);
 		cgp->c = NULL;
 		return 2;
 	}
