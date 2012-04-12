@@ -15,6 +15,33 @@ struct chromo_t *chromo_at(struct chromo_t *list, size_t i)
 	return list + i;
 }
 
+static
+struct chromo_t *impl_chromos_alloc(size_t count)
+{
+	return (struct chromo_t *) malloc(count * sizeof(struct chromo_t));
+}
+
+static
+struct cell_t *impl_cells_alloc(size_t count)
+{
+	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
+	return (struct cell_t *) malloc(count * cells * sizeof(struct cell_t));
+}
+
+static
+port_t *impl_inputs_alloc(size_t count)
+{
+	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
+	const size_t inputs = cells * func_inputs_max();
+	return (port_t *) malloc(count * inputs * sizeof(port_t));
+}
+
+static
+port_t *impl_outputs_alloc(size_t count)
+{
+	return (port_t *) malloc(count * CGP_OUTPUTS * sizeof(port_t));
+}
+
 struct chromo_t *chromo_alloc(size_t count)
 {
 	struct chromo_t *c = NULL;
