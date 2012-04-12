@@ -40,9 +40,7 @@ void cgp_fini(struct cgp_t *cgp)
 
 int cgp_gen_popul(struct cgp_t *cgp)
 {
-	const size_t units = CGP_WIDTH * CGP_HEIGHT; 
-
-	for(size_t i = 0; i < units; ++i)
+	for(size_t i = 0; i < CGP_POPUL; ++i)
 		chromo_gen(chromo_at(cgp->c, i));
 
 	return 0;
@@ -61,9 +59,7 @@ int cgp_next_popul(struct cgp_t *cgp)
 
 int cgp_eval_popul(struct cgp_t *cgp)
 {
-	const size_t units = CGP_WIDTH * CGP_HEIGHT; 
-
-	for(size_t i = 0; i < units; ++i) {
+	for(size_t i = 0; i < CGP_POPUL; ++i) {
 		if(fitness_compute(chromo_at(cgp->c, i), cgp->f + i))
 			return 1;
 	}
@@ -73,8 +69,6 @@ int cgp_eval_popul(struct cgp_t *cgp)
 
 void cgp_walk_popul(struct cgp_t *cgp, cgp_walk_f walkf, void *ctx)
 {
-	const size_t units = CGP_WIDTH * CGP_HEIGHT; 
-
-	for(size_t i = 0; i < units; ++i)
+	for(size_t i = 0; i < CGP_POPUL; ++i)
 		walkf(chromo_at(cgp->c, i), cgp->f[i], ctx);
 }
