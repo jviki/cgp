@@ -12,6 +12,16 @@
 typedef int func_t;
 
 /**
+ * Generates a function at random.
+ */
+void func_gen(func_t *f);
+
+/**
+ * Mutates the function.
+ */
+void func_mut(func_t *f);
+
+/**
  * String representation of the function.
  */
 const char *func_to_str(func_t f);
