@@ -21,6 +21,21 @@ enum func_t {
 	F_XOR
 };
 
+static
+const char *func_to_str(enum func_t f)
+{
+	switch(f) {
+	case F_AND:
+		return "AND";
+	case F_OR:
+		return "OR";
+	case F_XOR:
+		return "XOR";
+	default:
+		return "<?>";
+	}
+}
+
 /**
  * Representation of one cell in the CGP matrix.
  */
