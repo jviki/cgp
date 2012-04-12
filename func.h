@@ -24,6 +24,14 @@ void func_gen(func_t *f);
 void func_mut(func_t *f);
 
 /**
+ * Evaluates the function on the given array of operands.
+ * The result is stored in to dst.
+ * The length of op must be `func_inputs_max()` and
+ * the length of dst must be `func_outputs_max()`.
+ */
+void func_eval64(func_t f, uint64_t *op, uint64_t *dst);
+
+/**
  * String representation of the function.
  */
 const char *func_to_str(func_t f);
