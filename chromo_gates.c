@@ -1,5 +1,5 @@
 /**
- * chromo.c
+ * chromo_gates.c
  * Copyright (C) 2012 Jan Viktorin
  */
 
