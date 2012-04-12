@@ -130,9 +130,42 @@ void chromo_gen(struct chromo_t *c)
 		c->outputs[i] = port_gen(CGP_WIDTH);
 }
 
+static
+void port_mut(port_t *ports, size_t col, size_t i)
+{
+	ports[i] = port_gen(col);
+}
+
+static
+void cell_mut(struct cell_t *cells, size_t i, size_t what)
+{
+	assert(i < CGP_WIDTH * CGP_HEIGHT);
+	assert(what < 1 + func_inputs_max());
+
+	if(what == 0) {
+		func_mut(&cells[i].f);
+	}
+	else {
+		const size_t col = i / CGP_HEIGHT;
+		port_mut(cells[i].inputs, col, what - 1);
+	}
+}
+
 void chromo_mut(struct chromo_t *c)
 {
+	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
+	const size_t items = CGP_OUTPUTS + cells * (1 + func_inputs_max());
 
+	size_t i = rndgen_range(items - 1);
+
+	if(i < CGP_OUTPUTS) {
+		port_mut(c->outputs, CGP_WIDTH, i);
+	}
+	else {
+		size_t celli = (i - CGP_OUTPUTS) / (1 + func_inputs_max());
+		size_t what  = (i - CGP_OUTPUTS) % (1 + func_inputs_max());
+		cell_mut(c->cell, celli, what);
+	}
 }
 
 void chromo_print(FILE *fout, const struct chromo_t *c)
