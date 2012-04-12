@@ -28,7 +28,7 @@ int cgp_init(struct cgp_t *cgp)
 void cgp_fini(struct cgp_t *cgp)
 {
 	if(cgp->c != NULL) {
-		free(cgp->c);
+		chromo_free(cgp->c);
 		cgp->c = NULL;
 	}
 
