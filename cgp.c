@@ -6,6 +6,7 @@
 #include "cgp.h"
 #include "cgp_config.h"
 #include <assert.h>
+#include <string.h>
 
 int cgp_init(struct cgp_t *cgp)
 {
@@ -21,6 +22,8 @@ int cgp_init(struct cgp_t *cgp)
 		cgp->c = NULL;
 		return 2;
 	}
+
+	memset(cgp->f, 0, sizeof(fitness_t) * CGP_POPUL);
 
 	return 0;
 }
