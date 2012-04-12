@@ -46,3 +46,7 @@ void func_gen(func_t *f)
 	*f = rndgen_range(FUNC_COUNT - 1);
 }
 
+void func_mut(func_t *f)
+{
+	func_gen(f);
+}
