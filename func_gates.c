@@ -4,6 +4,7 @@
  */
 
 #include "func.h"
+#include "rndgen.h"
 
 size_t func_inputs_max(void)
 {
@@ -24,6 +25,8 @@ enum func_enum_t {
 	F_XOR
 };
 
+#define FUNC_COUNT 3
+
 const char *func_to_str(func_t f)
 {
 	switch((enum func_enum_t) f) {
@@ -37,3 +40,9 @@ const char *func_to_str(func_t f)
 		return "<?>";
 	}
 }
+
+void func_gen(func_t *f)
+{
+	*f = rndgen_range(FUNC_COUNT - 1);
+}
+
