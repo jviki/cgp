@@ -4,31 +4,11 @@
  */
 
 #include "chromo.h"
+#include "chromo_def.h"
 #include "func.h"
 #include "cgp_config.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-/**
- * Id of connected port.
- */
-typedef int port_t;
-
-/**
- * Representation of one cell in the CGP matrix.
- */
-struct cell_t {
-	func_t f;
-	port_t *inputs;
-};
-
-/**
- * Chromosome for bitonic sorter.
- */
-struct chromo_t {
-	struct cell_t *cell;
-	port_t *outputs;
-};
 
 struct chromo_t *chromo_at(struct chromo_t *list, size_t i)
 {
