@@ -20,6 +20,8 @@ typedef size_t port_t;
 struct cell_t {
 	func_t f;
 	port_t *inputs;
+
+	struct cell_t *next;
 };
 
 /**
