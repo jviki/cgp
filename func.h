@@ -7,6 +7,7 @@
 #define FUNC_H
 
 #include <stdlib.h>
+#include <inttypes.h>
 
 /**
  * Functions available for each CGP computation unit.
