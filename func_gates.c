@@ -5,6 +5,7 @@
 
 #include "func.h"
 #include "rndgen.h"
+#include <stdlib.h>
 
 size_t func_inputs_max(void)
 {
@@ -49,4 +50,21 @@ void func_gen(func_t *f)
 void func_mut(func_t *f)
 {
 	func_gen(f);
+}
+
+void func_eval64(func_t f, uint64_t *op, uint64_t *dst)
+{
+	switch((enum func_enum_t) f) {
+	case F_AND:
+		*dst = op[0] & op[1];
+		break;
+	case F_OR:
+		*dst = op[0] | op[1];
+		break;
+	case F_XOR:
+		*dst = op[0] ^ op[1];
+		break;
+	default:
+		abort();
+	}
 }
