@@ -29,8 +29,11 @@ struct cell_t *llist_from_chromo(struct cell_t *cell)
 {
 	struct cell_t *head = NULL;
 
-	for(size_t i = CGP_WIDTH * CGP_HEIGHT; i > 0; --i)
-		head = llist_append(head, cell + (i - 1));
+	//for(size_t i = CGP_WIDTH * CGP_HEIGHT; i > 0; --i)
+	//	head = llist_append(head, cell + (i - 1));
+
+	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i)
+		head = llist_append(head, cell + i);
 
 	return head;
 }
