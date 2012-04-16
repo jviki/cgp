@@ -11,8 +11,10 @@
 /**
  * Performs ALAP (as late as possible) algorithm
  * on the CGP matrix represented by the chromosome.
+ *
+ * Returns head of linked list of cells.
  */
-int chromo_alap(const struct chromo_t *c);
+struct cell_t *chromo_alap(const struct chromo_t *c);
 
 #endif
 
