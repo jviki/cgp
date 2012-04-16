@@ -47,5 +47,15 @@ size_t func_inputs_max(void);
  */
 size_t func_outputs_max(void);
 
+/**
+ * Returns the number of inputs of function f.
+ */
+size_t func_inputs(func_t f);
+
+/**
+ * Returns the number of outputs from function f.
+ */
+size_t func_outputs(func_t f);
+
 #endif
 
