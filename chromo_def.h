@@ -14,6 +14,8 @@
  */
 typedef size_t port_t;
 
+#define NULL_PORT ~((port_t) 0)
+
 /**
  * Representation of one cell in the CGP matrix.
  */
