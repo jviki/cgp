@@ -62,10 +62,11 @@ size_t ports_count(void)
 static
 size_t ports_add(port_t *ports, size_t count, port_t p)
 {
-	assert(count < ports_count()); // this is correct
-	                               // the counts should match
+	// this is correct
+	// the counts should match
+	assert(count < ports_count());
 
-	ports[++count] = p;
+	ports[count++] = p;
 	return count;
 }
 
