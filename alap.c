@@ -8,61 +8,132 @@
 #include "chromo_def.h"
 #include "cgp_config.h"
 #include <stdio.h>
+#include <assert.h>
+
+//
+// List of cells
+//
 
 static
-int cell_has_output(const size_t i, func_t f, port_t port)
+struct cell_t *llist_append(struct cell_t *head, struct cell_t *el)
 {
-	const size_t first = CGP_INPUTS + i * func_outputs_max();
-
-	return port >= first && port > (first + func_outputs_max());
+	assert(el != NULL);
+	el->next = head;
+	return el;
 }
 
-static
-struct cell_t *llist_append(struct cell_t *head, struct cell_t *e)
-{
-	e->next = head;
-	return e;
-}
+#define llist_move llist_append
 
 static
-struct cell_t *llist_from(struct cell_t *src, port_t *ports, size_t count)
+struct cell_t *llist_from_chromo(struct cell_t *cell)
 {
-	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
 	struct cell_t *head = NULL;
 
-	for(size_t i = cells; i > 0; --i) {
-		for(size_t j = 0; j < count; ++j) {
-			if(!cell_has_output(i, src[i - 1].f, ports[j]))
-				continue;
-
-			head = llist_append(head, src + i - 1);
-			break;
-		}
-	}
+	for(size_t i = CGP_WIDTH * CGP_HEIGHT; i > 0; ++i)
+		head = llist_append(head, cell + (i - 1));
 
 	return head;
 }
 
-int chromo_alap(const struct chromo_t *c)
+static
+struct cell_t *llist_first(struct cell_t *head)
 {
-	struct cell_t *first = NULL;
+	return head;
+}
 
-	first = llist_from(c->cell, c->outputs, CGP_OUTPUTS);
+static
+struct cell_t *llist_next(struct cell_t *el)
+{
+	assert(el != NULL);
+	return el->next;
+}
 
-	struct cell_t *curr = first;
-	while(curr != NULL) {
-		printf("[%s ", func_to_str(curr->f));
+//
+// Array of ports
+//
 
-		for(size_t i = 0; i < func_inputs_max(); ++i)
-			printf("%zu ", curr->inputs[i]);
+static
+size_t ports_count(void)
+{
+	return CGP_OUTPUTS
+		+ func_inputs_max() * (CGP_WIDTH * CGP_HEIGHT);
+}
 
-		printf("] | ");
-		curr = curr->next;
-	}
+static
+size_t ports_add(port_t *ports, size_t count, port_t p)
+{
+	assert(count < ports_count()); // this is correct
+	                               // the counts should match
+
+	ports[++count] = p;
+	return count;
+}
+
+static
+size_t ports_from_chromo(port_t *ports, port_t *outputs)
+{
+	size_t count = 0;
 
 	for(size_t i = 0; i < CGP_OUTPUTS; ++i)
-		printf("%zu ", c->outputs[i]);
+		count = ports_add(ports, count, outputs[i]);
 
-	printf("\n");
+	return count;
+}
+
+static
+size_t ports_add_inputs(port_t *ports, size_t count, const struct cell_t *c)
+{
+	for(size_t i = 0; i < func_inputs_max(); ++i) {
+		const port_t p = c->inputs[i];
+
+		if(p != NULL_PORT)
+			count = ports_add(ports, count, p);
+	}
+
+	return count;
+}
+
+static
+int ports_contain(port_t *ports, size_t count, port_t p)
+{
+	for(size_t i = 0; i < count; ++i)
+		if(p == ports[i])
+			return 1;
+
 	return 0;
+}
+
+static
+int all_outputs_in(port_t *ports, size_t count, size_t i)
+{
+	size_t first = (i - 1) * func_outputs_max();
+	size_t next_first  = i * func_outputs_max();
+
+	for(size_t j = first; j < next_first; ++j)
+		if(!ports_contain(ports, count, (port_t) j))
+			return 0;
+
+	return 1;
+}
+
+//
+// ALAP implementation
+//
+
+struct cell_t *chromo_alap(const struct chromo_t *c)
+{
+	port_t ports[ports_count()];
+	size_t ports_count = ports_from_chromo(ports, c->outputs);
+	struct cell_t *source = llist_from_chromo(c->cell);
+	struct cell_t *alap = NULL;
+
+	struct cell_t *curr = llist_first(source);
+	for(size_t i = 0; curr != NULL; curr = llist_next(curr), ++i) {
+		if(all_outputs_in(ports, ports_count, i))
+			alap = llist_move(alap, curr);
+
+		ports_count = ports_add_inputs(ports, ports_count, curr);
+	}
+
+	return alap;
 }
