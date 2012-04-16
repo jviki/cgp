@@ -129,7 +129,11 @@ struct cell_t *chromo_alap(const struct chromo_t *c)
 	struct cell_t *alap = NULL;
 
 	struct cell_t *curr = llist_first(source);
-	for(size_t i = 0; curr != NULL; curr = llist_next(curr), ++i) {
+	struct cell_t *next = NULL;
+
+	for(size_t i = 0; curr != NULL; curr = next, ++i) {
+		next = llist_next(curr);
+
 		if(all_outputs_in(ports, ports_count, i))
 			alap = llist_move(alap, curr);
 
