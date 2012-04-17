@@ -178,20 +178,15 @@ void chromo_mut(struct chromo_t *c)
 
 void chromo_print(FILE *fout, const struct chromo_t *c)
 {
+	fprintf(fout, "%zu %zu ", CGP_WIDTH, CGP_HEIGHT);
+	fprintf(fout, "%zu %zu ", func_inputs_max(), CGP_OUTPUTS);
+
 	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
 		const struct cell_t *cell = c->cell + i;
-		fprintf(fout, "(%zu, ", cell->id);
-		fprintf(fout, "%s [", func_to_str(cell->f));
+		fprintf(fout, "%zu ", cell->f);
 
 		for(size_t j = 0; j < func_inputs_max(); ++j)
-			fprintf(fout, "%zu%c", cell->inputs[j], (j + 1 == func_inputs_max()? ']' : ' '));
-
-		port_t first = NULL_PORT;
-		port_t last  = NULL_PORT;
-		cell_outputs(cell, &first, &last);
-		fprintf(fout, " [%zu..%zu]", first, last);
-
-		fprintf(fout, ") ");
+			fprintf(fout, "%zu ", cell->inputs[j]);
 	}
 
 	for(size_t j = 0; j < CGP_OUTPUTS; ++j)
