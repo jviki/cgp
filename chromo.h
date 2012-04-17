@@ -45,4 +45,10 @@ void chromo_mut(struct chromo_t *c);
  */
 void chromo_print(FILE *fout, const struct chromo_t *c);
 
+/**
+ * Parses a chromosome from the given stream.
+ * It returns zero when successful.
+ */
+int chromo_parse(FILE *fin, struct chromo_t *c);
+
 #endif

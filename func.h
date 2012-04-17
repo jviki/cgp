@@ -13,6 +13,7 @@
  * Functions available for each CGP computation unit.
  */
 typedef int func_t;
+#define FUNC_FMT "%d"
 
 /**
  * Generates a function at random.
