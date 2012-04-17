@@ -115,6 +115,12 @@ port_t port_gen(size_t col)
 	return first_possible + rndgen_range(max);
 }
 
+void cell_outputs(const struct cell_t *cell, port_t *first, port_t *last)
+{
+	*first = CGP_INPUTS + cell->id * func_outputs_max();
+	*last  = CGP_INPUTS + (cell->id + 1) * func_outputs_max();
+}
+
 void chromo_gen(struct chromo_t *c)
 {
 	assert(CGP_LBACK > 0);

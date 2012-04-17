@@ -28,6 +28,11 @@ struct cell_t {
 };
 
 /**
+ * Returns range of output ports for the given cell.
+ */
+void cell_outputs(const struct cell_t *cell, port_t *first, port_t *last);
+
+/**
  * Chromosome for bitonic sorter.
  */
 struct chromo_t {
