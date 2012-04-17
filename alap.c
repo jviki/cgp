@@ -108,12 +108,14 @@ int ports_contain(port_t *ports, size_t count, port_t p)
 }
 
 static
-int all_outputs_in(port_t *ports, size_t count, size_t i)
+int all_outputs_in(port_t *ports, size_t count, const struct cell_t *cell)
 {
-	size_t first = (i - 1) * func_outputs_max();
-	size_t next_first  = i * func_outputs_max();
+	size_t first;
+	size_t last;
 
-	for(size_t j = first; j < next_first; ++j)
+	cell_outputs(cell, &first, &last);
+
+	for(size_t j = first; j <= last; ++j)
 		if(!ports_contain(ports, count, (port_t) j))
 			return 0;
 
@@ -137,7 +139,7 @@ struct cell_t *chromo_alap(const struct chromo_t *c)
 	for(size_t i = 0; curr != NULL; curr = next, ++i) {
 		next = llist_next(curr);
 
-		if(all_outputs_in(ports, ports_count, i))
+		if(all_outputs_in(ports, ports_count, curr))
 			alap = llist_move(alap, curr);
 
 		ports_count = ports_add_inputs(ports, ports_count, curr);
