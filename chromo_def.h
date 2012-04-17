@@ -22,6 +22,7 @@ typedef size_t port_t;
 struct cell_t {
 	func_t f;
 	port_t *inputs;
+	size_t id;
 
 	struct cell_t *next;
 };

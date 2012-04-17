@@ -62,8 +62,10 @@ struct chromo_t *chromo_alloc(size_t count)
 		c[i].cell = all_cells + (i * cells);
 		c[i].outputs = all_outputs + (i * CGP_OUTPUTS);
 
-		for(size_t j = 0; j < cells; ++j)
+		for(size_t j = 0; j < cells; ++j) {
 			c[i].cell[j].inputs = all_inputs + (i * inputs) + (j * func_inputs_max());
+			c[i].cell[j].id = j;
+		}
 	}
 
 	return c;
