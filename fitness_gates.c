@@ -13,7 +13,7 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 	struct cell_t *cells = chromo_alap(c);
 
 	for(; cells != NULL; cells = cells->next) {
-		fprintf(stderr, "%s (", func_to_str(cells->f));
+		fprintf(stderr, "%s/%zu (", func_to_str(cells->f), cells->id);
 
 		for(size_t i = 0; i < func_inputs_max(); ++i) {
 			fprintf(stderr, "%zu", cells->inputs[i]);
