@@ -130,17 +130,13 @@ struct cell_t *chromo_alap(const struct chromo_t *c)
 {
 	port_t ports[ports_count()];
 	size_t ports_count = ports_from_chromo(ports, c->outputs);
-	struct cell_t *source = llist_from_chromo(c->cell);
 	struct cell_t *alap = NULL;
 
-	struct cell_t *curr = llist_first(source);
-	struct cell_t *next = NULL;
-
-	for(size_t i = 0; curr != NULL; curr = next, ++i) {
-		next = llist_next(curr);
+	for(size_t i = CGP_WIDTH * CGP_HEIGHT; i > 0; --i) {
+		struct cell_t *curr = c->cell + (i - 1);
 
 		if(all_outputs_in(ports, ports_count, curr))
-			alap = llist_move(alap, curr);
+			alap = llist_append(alap, curr);
 
 		ports_count = ports_add_inputs(ports, ports_count, curr);
 	}
