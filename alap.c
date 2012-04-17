@@ -22,35 +22,6 @@ struct cell_t *llist_append(struct cell_t *head, struct cell_t *el)
 	return el;
 }
 
-#define llist_move llist_append
-
-static
-struct cell_t *llist_from_chromo(struct cell_t *cell)
-{
-	struct cell_t *head = NULL;
-
-	//for(size_t i = CGP_WIDTH * CGP_HEIGHT; i > 0; --i)
-	//	head = llist_append(head, cell + (i - 1));
-
-	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i)
-		head = llist_append(head, cell + i);
-
-	return head;
-}
-
-static
-struct cell_t *llist_first(struct cell_t *head)
-{
-	return head;
-}
-
-static
-struct cell_t *llist_next(struct cell_t *el)
-{
-	assert(el != NULL);
-	return el->next;
-}
-
 //
 // Array of ports
 //
