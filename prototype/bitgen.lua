@@ -125,10 +125,69 @@ function bitgen_2tok(k, width)
 	return vec
 end
 
-for _, v in ipairs(bitgen_2tok(9, 32)) do
-	for i, d in ipairs(v) do
-		io.stdout:write(string.format("0x%08x%s", d, i == #v and "" or " -> "))
+------------------
+
+function bitgen2_init(k)
+	local vec = {
+		0xaaaaaaaa,
+		0xcccccccc,
+		0xf0f0f0f0,
+		0xff00ff00,
+		0xffff0000
+	}
+
+	for i = #vec + 1, k do
+		table.insert(vec, 0x00000000)
 	end
 
-	print("")
+	return vec
+end
+
+function bitgen2_2tok(vec, k)
+	local flip = true
+
+	for i = 6, k do
+		if not flip then
+			break
+		end
+
+		if flip and vec[i] == 0x00000000 then
+			flip = false
+			vec[i] = 0xffffffff
+		elseif flip and vec[i] == 0xffffffff then
+			flip = true
+			vec[i] = 0x00000000
+		end
+	end
+
+	return vec
+end
+
+------------------
+
+local K = 12
+local mem = bitgen_2tok(K, 32)
+--for _, v in ipairs(mem) do
+--	print(string.format("0x%08x\t0x%08x", v[1], v[2]))
+--	for i, d in ipairs(v) do
+--		io.stdout:write(string.format("0x%08x%s", d, i == #v and "" or " -> "))
+--	end
+--
+--	print("")
+--end
+
+print("======================")
+
+local state = bitgen2_init(K)
+for i, v in ipairs(state) do
+	print(string.format("0x%08x\t0x%08x", v, mem[i][1]), v == mem[i][1])
+end
+
+for j = 2, 2 ^ K / 32 do
+	print("======================")
+
+	state = bitgen2_2tok(state, K)
+	for i, v in ipairs(state) do
+		print(string.format("0x%08x\t0x%08x", v, mem[i][j]), v == mem[i][j])
+	end
 end
