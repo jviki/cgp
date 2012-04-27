@@ -19,6 +19,15 @@ static const uint64_t init[] = {
 	0xFFFFFFFF00000000
 };
 
+static const uint64_t sorted[] = {
+	0xFFFFFFFFFFFFFFFE,
+	0xFFFFFFFEFFFEFEE8,
+	0xFFFEFEE8FEE8E880,
+	0xFEE8E880E8808000,
+	0xE880800080000000,
+	0x8000000000000000,
+};
+
 static const size_t init_len = sizeof(init) / sizeof(uint64_t);
 
 int bitgen_init(struct bitgen_t *g, size_t width)
@@ -87,4 +96,28 @@ int bitgen_next(struct bitgen_t *g, uint64_t *d)
 		g->valid = 0;
 
 	return 1;
+}
+
+void bitgen_sort(const uint64_t *d, uint64_t *s, size_t width)
+{
+	assert(width > 0);
+	size_t count = 0;
+
+	for(size_t i = 0; i < width; ++i) {
+		if(d[i] == 0xFFFFFFFFFFFFFFFF) {
+			s[count] = d[i];
+			count += 1;
+			continue;
+		}
+
+		for(size_t j = 0; j < init_len; ++j) {
+			if(init[j] == d[i]) {
+				s[count] = sorted[j];
+				count += 1;
+			}
+		}
+	}
+
+	for(size_t i = 0; i < (width - count); ++i)
+		s[count + i] = 0;
 }
