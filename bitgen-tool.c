@@ -27,9 +27,13 @@ int main(int argc, char **argv)
 	}
 
 	uint64_t d[width];
+	uint64_t s[width];
+
 	while(bitgen_next(&g, d)) {
+		bitgen_sort(d, s, (size_t) width);
+
 		for(int i = 0; i < width; ++i)
-			printf("0x%016" PRIx64 "\n", d[i]);
+			printf("0x%016" PRIx64 " -> 0x%016" PRIx64 "\n", d[i], s[i]);
 	}
 
 	bitgen_fini(&g);

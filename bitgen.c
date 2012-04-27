@@ -109,7 +109,9 @@ void bitgen_sort(const uint64_t *d, uint64_t *s, size_t width)
 			count += 1;
 			continue;
 		}
+	}
 
+	for(size_t i = 0; i < width; ++i) {
 		for(size_t j = 0; j < init_len; ++j) {
 			if(init[j] == d[i]) {
 				s[count] = sorted[j];
