@@ -17,6 +17,16 @@ void handle_error(const char *msg)
 		fprintf(stderr, "Error: %s\n", msg);
 }
 
+void find_best_fitness(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
+{
+	fitness_t *bestf = (fitness_t *) ctx;
+
+	if(i == 0)
+		*bestf = f;
+	else if(f > *bestf)
+		*bestf = f;
+}
+
 void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 {
 	struct cgp_t *cgp = (struct cgp_t *) ctx;
@@ -56,6 +66,10 @@ int main(int argc, char **argv)
 			handle_error("cgp_eval_popul");
 			goto error_fini;
 		}
+
+		fitness_t f;
+		cgp_walk_popul(&cgp, &find_best_fitness, &f);
+		printf("(%zu) Best: " FITNESS_FMT "\n", cgp.gener, f);
 	}
 
 	printf("Generations: %zu\n", cgp.gener);
