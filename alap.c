@@ -15,7 +15,7 @@
 //
 
 static
-struct cell_t *llist_append(struct cell_t *head, struct cell_t *el)
+struct cell_t *llist_prepend(struct cell_t *head, struct cell_t *el)
 {
 	assert(el != NULL);
 	el->next = head;
@@ -107,7 +107,7 @@ struct cell_t *chromo_alap(const struct chromo_t *c)
 		struct cell_t *curr = c->cell + (i - 1);
 
 		if(all_outputs_in(ports, ports_count, curr))
-			alap = llist_append(alap, curr);
+			alap = llist_prepend(alap, curr);
 
 		ports_count = ports_add_inputs(ports, ports_count, curr);
 	}
