@@ -81,6 +81,20 @@ void chromo_free(struct chromo_t *c)
 	}
 }
 
+void chromo_copy(struct chromo_t *dst, const struct chromo_t *src)
+{
+	memcpy(dst->outputs, src->outputs, CGP_OUTPUTS * sizeof(port_t));
+
+	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
+		dst->cell[i].next = NULL;
+		dst->cell[i].f = src->cell[i].f;
+		dst->cell[i].id = src->cell[i].id;
+
+		memcpy(dst->cell[i].inputs, src->cell[i].inputs,
+				func_inputs_max() * sizeof(port_t));
+	}
+}
+
 static
 port_t first_port_possible(size_t col)
 {

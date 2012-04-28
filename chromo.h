@@ -26,6 +26,13 @@ struct chromo_t *chromo_alloc(size_t count);
 void chromo_free(struct chromo_t *c);
 
 /**
+ * Creates deep copy of the `src` chromosome. The `dst`
+ * chromosome must be allocated. This functions just copies
+ * the contents, it doesn't allocate memory.
+ */
+void chromo_copy(struct chromo_t *dst, const struct chromo_t *src);
+
+/**
  * Returns i-th chromosome in the list.
  */
 struct chromo_t *chromo_at(struct chromo_t *list, size_t i);
