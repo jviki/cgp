@@ -21,6 +21,7 @@ void eval_fenotype(const struct cell_t *cells, const port_t *outports,
 	uint64_t cache[CGP_INPUTS
 		+ (func_inputs_max() * CGP_WIDTH * CGP_HEIGHT)];
 
+	memset(cache, 0, sizeof(cache));
 	memcpy(cache, inputs, sizeof(uint64_t) * CGP_INPUTS);
 
 	const struct cell_t *curr;
