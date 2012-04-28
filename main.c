@@ -7,6 +7,7 @@
 #include "cgp_config.h"
 #include <errno.h>
 #include <stdio.h>
+#include <time.h>
 
 void handle_error(const char *msg)
 {
