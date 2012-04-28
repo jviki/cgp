@@ -181,15 +181,17 @@ void chromo_mut(struct chromo_t *c)
 	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
 	const size_t items = CGP_OUTPUTS + cells * (1 + func_inputs_max());
 
-	size_t i = rndgen_range(items - 1);
+	for(size_t j = 0; j < CGP_MUTS; ++j) {
+		size_t i = rndgen_range(items - 1);
 
-	if(i < CGP_OUTPUTS) {
-		port_mut(c->outputs, CGP_WIDTH, i);
-	}
-	else {
-		size_t celli = (i - CGP_OUTPUTS) / (1 + func_inputs_max());
-		size_t what  = (i - CGP_OUTPUTS) % (1 + func_inputs_max());
-		cell_mut(c->cell, celli, what);
+		if(i < CGP_OUTPUTS) {
+			port_mut(c->outputs, CGP_WIDTH, i);
+		}
+		else {
+			size_t celli = (i - CGP_OUTPUTS) / (1 + func_inputs_max());
+			size_t what  = (i - CGP_OUTPUTS) % (1 + func_inputs_max());
+			cell_mut(c->cell, celli, what);
+		}
 	}
 }
 

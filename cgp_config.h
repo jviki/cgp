@@ -13,6 +13,7 @@
 #define CGP_GENER   1000
 #define CGP_OUTPUTS 4
 #define CGP_INPUTS  4
+#define CGP_MUTS    1
 
 #endif
 
