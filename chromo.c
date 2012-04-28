@@ -62,8 +62,10 @@ struct chromo_t *chromo_alloc(size_t count)
 		c[i].cell = all_cells + (i * cells);
 		c[i].outputs = all_outputs + (i * CGP_OUTPUTS);
 
-		for(size_t j = 0; j < cells; ++j)
+		for(size_t j = 0; j < cells; ++j) {
 			c[i].cell[j].inputs = all_inputs + (i * inputs) + (j * func_inputs_max());
+			c[i].cell[j].id = j;
+		}
 	}
 
 	return c;
@@ -111,6 +113,12 @@ port_t port_gen(size_t col)
 
 	const size_t max = last_possible - first_possible;
 	return first_possible + rndgen_range(max);
+}
+
+void cell_outputs(const struct cell_t *cell, port_t *first, port_t *last)
+{
+	*first = CGP_INPUTS + cell->id * func_outputs_max();
+	*last  = CGP_INPUTS + (cell->id + 1) * func_outputs_max();
 }
 
 void chromo_gen(struct chromo_t *c)
@@ -170,16 +178,53 @@ void chromo_mut(struct chromo_t *c)
 
 void chromo_print(FILE *fout, const struct chromo_t *c)
 {
+	fprintf(fout, "%d %d ", CGP_WIDTH, CGP_HEIGHT);
+	fprintf(fout, "%zu %d ", func_inputs_max(), CGP_OUTPUTS);
+
 	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
 		const struct cell_t *cell = c->cell + i;
-		fprintf(fout, "(%zu [%zu, %zu]: ", i, i / CGP_HEIGHT, i % CGP_HEIGHT);
+		fprintf(fout, "%d ", cell->f);
 
 		for(size_t j = 0; j < func_inputs_max(); ++j)
 			fprintf(fout, "%zu ", cell->inputs[j]);
-
-		fprintf(fout, "%s) ", func_to_str(cell->f));
 	}
 
 	for(size_t j = 0; j < CGP_OUTPUTS; ++j)
 		fprintf(fout, "%zu ", c->outputs[j]);
+}
+
+int chromo_parse(FILE *fin, struct chromo_t *c)
+{
+	size_t cgp_width;
+	size_t cgp_height;
+	size_t inputs_max;
+	size_t cgp_outputs;
+
+	// check chromosome compatibility
+	if(fscanf(fin, "%zu %zu", &cgp_width, &cgp_height) != 2)
+		return 1;
+	if(cgp_width != CGP_WIDTH || cgp_height != CGP_HEIGHT)
+		return 1;
+	if(fscanf(fin, "%zu %zu", &inputs_max, &cgp_outputs) != 2)
+		return 2;
+	if(inputs_max != func_inputs_max() || cgp_outputs != CGP_OUTPUTS)
+		return 2;
+
+	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
+		struct cell_t *cell = c->cell + i;
+		if(fscanf(fin, FUNC_FMT, &cell->f) != 1)
+			return 3;
+
+		for(size_t j = 0; j < func_inputs_max(); ++j) {
+			if(fscanf(fin, "%zu", &cell->inputs[j]) != 1)
+				return 4;
+		}
+	}
+
+	for(size_t j = 0; j < CGP_OUTPUTS; ++j) {
+		if(fscanf(fin, "%zu", &c->outputs[j]) != 1)
+			return 5;
+	}
+
+	return 0;
 }

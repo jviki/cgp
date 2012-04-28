@@ -17,6 +17,16 @@ size_t func_outputs_max(void)
 	return 1;
 }
 
+size_t func_inputs(func_t f)
+{
+	return 2;
+}
+
+size_t func_outputs(func_t f)
+{
+	return 1;
+}
+
 /**
  * Available functions.
  */

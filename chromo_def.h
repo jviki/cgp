@@ -14,13 +14,23 @@
  */
 typedef size_t port_t;
 
+#define NULL_PORT ~((port_t) 0)
+
 /**
  * Representation of one cell in the CGP matrix.
  */
 struct cell_t {
 	func_t f;
 	port_t *inputs;
+	size_t id;
+
+	struct cell_t *next;
 };
+
+/**
+ * Returns range of output ports for the given cell.
+ */
+void cell_outputs(const struct cell_t *cell, port_t *first, port_t *last);
 
 /**
  * Chromosome for bitonic sorter.

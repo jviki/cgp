@@ -13,6 +13,7 @@
  * Functions available for each CGP computation unit.
  */
 typedef int func_t;
+#define FUNC_FMT "%d"
 
 /**
  * Generates a function at random.
@@ -46,6 +47,16 @@ size_t func_inputs_max(void);
  * Returns maximal number of outputs from all functions.
  */
 size_t func_outputs_max(void);
+
+/**
+ * Returns the number of inputs of function f.
+ */
+size_t func_inputs(func_t f);
+
+/**
+ * Returns the number of outputs from function f.
+ */
+size_t func_outputs(func_t f);
 
 #endif
 
