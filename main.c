@@ -4,6 +4,7 @@
  */
 
 #include "cgp.h"
+#include "cgp_config.h"
 #include <errno.h>
 #include <stdio.h>
 
@@ -17,10 +18,15 @@ void handle_error(const char *msg)
 
 void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 {
-	if(fitness_isbest(f)) {
+	struct cgp_t *cgp = (struct cgp_t *) ctx;
+
+	if(cgp->found_best && fitness_isbest(f)) {
 		printf(FITNESS_FMT "\t", f);
 		chromo_print(stdout, c);
 		fputc('\n', stdout);
+	}
+	else {
+		printf(FITNESS_FMT "%s", f, i + 1 < CGP_POPUL? "," : "\n");
 	}
 }
 
@@ -50,7 +56,8 @@ int main(int argc, char **argv)
 		}
 	}
 
-	cgp_walk_popul(&cgp, &print_chromo, NULL);
+	printf("Generations: %zu\n", cgp.gener);
+	cgp_walk_popul(&cgp, &print_chromo, &cgp);
 	cgp_fini(&cgp);
 	return 0;
 
