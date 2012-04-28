@@ -29,6 +29,8 @@ void chromo_free(struct chromo_t *c);
  * Creates deep copy of the `src` chromosome. The `dst`
  * chromosome must be allocated. This functions just copies
  * the contents, it doesn't allocate memory.
+ * It doesn't copy anything when the pointers have the same
+ * target location.
  */
 void chromo_copy(struct chromo_t *dst, const struct chromo_t *src);
 

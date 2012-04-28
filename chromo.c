@@ -83,6 +83,9 @@ void chromo_free(struct chromo_t *c)
 
 void chromo_copy(struct chromo_t *dst, const struct chromo_t *src)
 {
+	if(src == dst)
+		return;
+
 	memcpy(dst->outputs, src->outputs, CGP_OUTPUTS * sizeof(port_t));
 
 	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
