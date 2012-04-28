@@ -13,8 +13,8 @@
 #include <assert.h>
 
 static
-void eval_fenotype(struct cell_t *cells, port_t *outports,
-		uint64_t *inputs, uint64_t *outputs)
+void eval_fenotype(const struct cell_t *cells, const port_t *outports,
+		const uint64_t *inputs, uint64_t *outputs)
 {
 	assert(CGP_INPUTS >= CGP_OUTPUTS);
 	uint64_t op[func_inputs_max()];
@@ -23,7 +23,7 @@ void eval_fenotype(struct cell_t *cells, port_t *outports,
 
 	memcpy(cache, inputs, sizeof(uint64_t) * CGP_INPUTS);
 
-	struct cell_t *curr;
+	const struct cell_t *curr;
 	for(curr = cells; curr != NULL; curr = curr->next) {
 		for(size_t i = 0; i < func_inputs(curr->f); ++i)
 			op[i] = cache[curr->inputs[i]];
