@@ -35,9 +35,9 @@ void chromo_free(struct chromo_t *c);
 void chromo_copy(struct chromo_t *dst, const struct chromo_t *src);
 
 /**
- * Returns i-th chromosome in the list.
+ * Returns i-th chromosome in the array.
  */
-struct chromo_t *chromo_at(struct chromo_t *list, size_t i);
+struct chromo_t *chromo_at(struct chromo_t *array, size_t i);
 
 /**
  * Generates a random chromosome.

@@ -13,9 +13,9 @@
 #include <string.h>
 #include <assert.h>
 
-struct chromo_t *chromo_at(struct chromo_t *list, size_t i)
+struct chromo_t *chromo_at(struct chromo_t *array, size_t i)
 {
-	return list + i;
+	return array + i;
 }
 
 static
