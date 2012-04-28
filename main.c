@@ -33,6 +33,7 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 
 int main(int argc, char **argv)
 {
+	srand(time(NULL));
 	struct cgp_t cgp;
 
 	if(cgp_init(&cgp)) {
