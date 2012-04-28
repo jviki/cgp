@@ -30,12 +30,14 @@ int cgp_init(struct cgp_t *cgp);
 void cgp_fini(struct cgp_t *cgp);
 
 /**
- * Generates a population at random.
+ * Generates a population at random and evaluates it.
  */
 int cgp_gen_popul(struct cgp_t *cgp);
 
 /**
  * Says true when the CGP is done.
+ * The generated population must be evaluated when calling
+ * this function.
  */
 int cgp_done(const struct cgp_t *cgp);
 
@@ -45,7 +47,7 @@ int cgp_done(const struct cgp_t *cgp);
 int cgp_next_popul(struct cgp_t *cgp);
 
 /**
- * Evaluates current population by a fitness function.
+ * Evaluates current population (cgp->gener > 0) by a fitness function.
  */
 int cgp_eval_popul(struct cgp_t *cgp);
 
