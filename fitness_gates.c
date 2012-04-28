@@ -12,11 +12,56 @@
 #include <string.h>
 #include <assert.h>
 
-void eval_fenotype(struct cell_t *cells, uint64_t *inputs, uint64_t *outputs)
+static
+void eval_fenotype(struct cell_t *cells, port_t *outports,
+		uint64_t *inputs, uint64_t *outputs)
 {
 	assert(CGP_INPUTS >= CGP_OUTPUTS);
+	uint64_t op[func_inputs_max()];
+	uint64_t cache[CGP_INPUTS
+		+ (func_inputs_max() * CGP_WIDTH * CGP_HEIGHT)];
 
-	memcpy(outputs, inputs, CGP_OUTPUTS * sizeof(uint64_t));
+	memcpy(cache, inputs, sizeof(uint64_t) * CGP_INPUTS);
+
+	struct cell_t *curr;
+	for(curr = cells; curr != NULL; curr = curr->next) {
+		for(size_t i = 0; i < func_inputs(curr->f); ++i)
+			op[i] = cache[curr->inputs[i]];
+
+		size_t first;
+		size_t notused;
+		cell_outputs(curr, &first, &notused);
+
+		func_eval64(curr->f, op, cache + first);
+	}
+
+	for(size_t i = 0; i < CGP_OUTPUTS; ++i)
+		outputs[i] = cache[outports[i]];
+}
+
+// See http://gurmeet.net/puzzles/fast-bit-counting-routines/
+static inline
+size_t dense_ones(uint64_t n)
+{
+	size_t count = 8 * sizeof(uint64_t);
+	n ^= (uint64_t) -1;
+
+	while(n) {
+		count--;
+		n &= n - 1;
+	}
+
+	return count;
+}
+
+static
+size_t count_ones(uint64_t bits)
+{
+#if defined(__GNUC__)
+	return __builtin_popcountll(bits);
+#else
+	return dense_ones(bits);
+#endif
 }
 
 int fitness_compute(const struct chromo_t *c, fitness_t *value)
@@ -34,12 +79,12 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 	size_t incorrect = 0;
 
 	while(bitgen_next(&bitgen, inputs)) {
-		eval_fenotype(cells, inputs, outputs);
+		eval_fenotype(cells, c->outputs, inputs, outputs);
 		bitgen_sort(inputs, sorted, CGP_INPUTS);
 
 		for(size_t i = 0; i < CGP_OUTPUTS; ++i) {
-			if(outputs[i] != sorted[i])
-				incorrect += 1;
+			const uint64_t tmp = outputs[i] ^ sorted[i];
+			incorrect += count_ones(tmp);
 		}
 	}
 
