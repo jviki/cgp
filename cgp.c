@@ -52,7 +52,7 @@ int priv_eval_popul(struct chromo_t *c, size_t len, fitness_t *f, int *found_bes
 {
 	*found_best = 0;
 
-	for(size_t i = 0; i < CGP_POPUL; ++i) {
+	for(size_t i = 0; i < len; ++i) {
 		if(fitness_compute(chromo_at(c, i), f + i))
 			return 1;
 
