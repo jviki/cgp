@@ -15,7 +15,7 @@ void handle_error(const char *msg)
 		fprintf(stderr, "Error: %s\n", msg);
 }
 
-void print_chromo(const struct chromo_t *c, fitness_t f, void *ctx)
+void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 {
 	if(fitness_isbest(f)) {
 		printf(FITNESS_FMT "\t", f);

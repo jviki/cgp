@@ -55,7 +55,7 @@ int cgp_eval_popul(struct cgp_t *cgp);
 /**
  * USer defined walking function.
  */
-typedef void (*cgp_walk_f)(const struct chromo_t *, fitness_t, void *);
+typedef void (*cgp_walk_f)(size_t i, const struct chromo_t *, fitness_t, void *);
 
 /**
  * Walks the current population. User can pass a context information

@@ -111,5 +111,5 @@ int cgp_next_popul(struct cgp_t *cgp)
 void cgp_walk_popul(struct cgp_t *cgp, cgp_walk_f walkf, void *ctx)
 {
 	for(size_t i = 0; i < CGP_POPUL; ++i)
-		walkf(chromo_at(cgp->c, i), cgp->f[i], ctx);
+		walkf(i, chromo_at(cgp->c, i), cgp->f[i], ctx);
 }
