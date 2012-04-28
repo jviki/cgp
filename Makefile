@@ -11,3 +11,5 @@ mut-tool: mut-tool.o chromo.o func_gates.o rndgen.o
 
 clean:
 	$(RM) *.o
+distclean: clean
+	$(RM) bitgen-tool chromo-tool fitness-tool mut-tool cgp
