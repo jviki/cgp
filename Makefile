@@ -1,5 +1,7 @@
 CC = gcc
-CFLAGS = -std=c99 -Wall -Wextra -pedantic -ggdb3
+CFLAGS  = -std=c99 -Wall -Wextra -pedantic -O2
+CFLAGS += -Wno-unknown-pragmas -fopenmp
+LDFLAGS = -lm -fopenmp
 
 OBJ = cgp.o main.o chromo.o func_gates.o fitness_gates.o rndgen.o alap.o bitgen.o
 

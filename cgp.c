@@ -99,6 +99,7 @@ int cgp_next_popul(struct cgp_t *cgp)
 	chromo_copy(cgp->c, winner);
 	cgp->f[0] = cgp->f[winner_i];
 
+#pragma omp parallel for
 	for(size_t i = 1; i < CGP_POPUL - 1; ++i) {
 		chromo_copy(chromo_at(cgp->c, i), cgp->c);
 		chromo_mut(chromo_at(cgp->c,  i));
