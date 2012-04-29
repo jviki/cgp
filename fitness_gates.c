@@ -78,14 +78,19 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 	uint64_t sorted[CGP_INPUTS];
 	uint64_t outputs[CGP_OUTPUTS];
 	size_t incorrect = 0;
+	uint64_t mask = 0xFFFFFFFFFFFFFFFF;
 
 	while(bitgen_next(&bitgen, inputs)) {
 		eval_fenotype(cells, c->outputs, inputs, outputs);
 		bitgen_sort(inputs, sorted, CGP_INPUTS);
 
+		if(!bitgen_has_next(&bitgen))
+			mask = CGP_OUTPUTS >= 6? 0xFFFFFFFFFFFFFFFF
+			     : (((uint64_t) 1) << (1 << CGP_OUTPUTS)) - 1;
+
 		for(size_t i = 0; i < CGP_OUTPUTS; ++i) {
 			const uint64_t tmp = outputs[i] ^ sorted[i];
-			incorrect += count_ones(tmp);
+			incorrect += count_ones(tmp & mask);
 		}
 	}
 
