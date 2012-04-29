@@ -23,7 +23,7 @@ void find_best_fitness(size_t i, const struct chromo_t *c, fitness_t f, void *ct
 
 	if(i == 0)
 		*bestf = f;
-	else if(f > *bestf)
+	else if(fitness_cmp(f, *bestf) > 0)
 		*bestf = f;
 }
 
