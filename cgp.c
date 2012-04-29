@@ -51,16 +51,20 @@ static
 int priv_eval_popul(struct chromo_t *c, size_t len, fitness_t *f, int *found_best)
 {
 	*found_best = 0;
+	int err = 0;
+	int best_chromo_found = 0;
 
+#pragma omp parallel for reduction(+:err,best_chromo_found)
 	for(size_t i = 0; i < len; ++i) {
 		if(fitness_compute(chromo_at(c, i), f + i))
-			return 1;
+			err = 1;
 
 		if(fitness_isbest(f[i]))
-			*found_best = 1;
+			best_chromo_found = 1;
 	}
 
-	return 0;
+	*found_best = best_chromo_found;
+	return err;
 }
 
 int cgp_gen_popul(struct cgp_t *cgp)
