@@ -37,7 +37,9 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 		fputc('\n', stdout);
 	}
 	else {
-		printf(FITNESS_FMT "%s", f, i + 1 < CGP_POPUL? "," : "\n");
+		printf(FITNESS_FMT ": ", f);
+		chromo_print(stdout, c);
+		fputc('\n', stdout);
 	}
 }
 
