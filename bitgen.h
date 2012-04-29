@@ -50,6 +50,13 @@ int bitgen_init(struct bitgen_t *g, size_t width);
 void bitgen_fini(struct bitgen_t *g);
 
 /**
+ * Returns true whether the `bitgen_next()`
+ * will generate next vector or false when
+ * there are no more vectors to be generated.
+ */
+int bitgen_has_next(const struct bitgen_t *g);
+
+/**
  * Generates a piece of the bit-space into the array `d`.
  * The array `d` must be at least of length `width` given
  * to `bitgen_init`.

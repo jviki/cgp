@@ -62,6 +62,11 @@ void bitgen_fini(struct bitgen_t *g)
 	g->valid = 0;
 }
 
+int bitgen_has_next(const struct bitgen_t *g)
+{
+	return g->valid;
+}
+
 int bitgen_next(struct bitgen_t *g, uint64_t *d)
 {
 	assert(g->width > 0);
