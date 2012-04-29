@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 		//////////////
 	}
 
-	printf("Generations: %zu\n", cgp.gener);
+	printf("\nGenerations: %zu\n", cgp.gener);
 	cgp_walk_popul(&cgp, &print_chromo, &cgp);
 	cgp_fini(&cgp);
 	return 0;
