@@ -58,6 +58,11 @@ int main(int argc, char **argv)
 		goto error_fini;
 	}
 
+	//////////////
+	fitness_t tot = 0;
+	size_t cnt = 0;
+	//////////////
+
 	while(!cgp_done(&cgp)) {
 		if(cgp_next_popul(&cgp)) {
 			handle_error("cgp_next_popul");
@@ -69,9 +74,15 @@ int main(int argc, char **argv)
 			goto error_fini;
 		}
 
+		//////////////
 		fitness_t f;
 		cgp_walk_popul(&cgp, &find_best_fitness, &f);
-		printf("(%zu) Best: " FITNESS_FMT "\n", cgp.gener, f);
+		tot += f;
+		cnt += 1;
+
+		if(cnt % 250 == 0)
+			printf("\rAvarage fitness: %lf", ((double) tot) / cnt);
+		//////////////
 	}
 
 	printf("Generations: %zu\n", cgp.gener);
