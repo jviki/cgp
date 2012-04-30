@@ -53,6 +53,7 @@ size_t count_cell_list(const struct cell_t *c)
 int fitness_compute(const struct chromo_t *c, fitness_t *value)
 {
 	assert(CGP_INPUTS >= CGP_OUTPUTS);
+	static const size_t max_count = CGP_WIDTH * CGP_HEIGHT;
 
 	struct bitgen_t bitgen;
 	if(bitgen_init(&bitgen, CGP_INPUTS))
@@ -79,10 +80,15 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 		}
 	}
 
-	const size_t max_count = CGP_WIDTH * CGP_HEIGHT;
-	const size_t cur_count = count_cell_list(cells);
+	if(incorrect == 0) {
+		const size_t cur_count = count_cell_list(cells);
 
-	*value = incorrect == 0? (max_count - cur_count) + incorrect : max_count + incorrect;
+		*value = max_count + incorrect;
+	}
+	else {
+		*value = max_count + incorrect;
+	}
+
 	bitgen_fini(&bitgen);
 	return 0;
 }
