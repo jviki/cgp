@@ -211,7 +211,8 @@ void chromo_mut(struct chromo_t *c)
 void chromo_print(FILE *fout, const struct chromo_t *c)
 {
 	fprintf(fout, "%d %d ", CGP_WIDTH, CGP_HEIGHT);
-	fprintf(fout, "%zu %d ", func_inputs_max(), CGP_OUTPUTS);
+	fprintf(fout, "%d %d ", CGP_INPUTS, CGP_OUTPUTS);
+	fprintf(fout, "%zu %zu ", func_inputs_max(), func_outputs_max());
 
 	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
 		const struct cell_t *cell = c->cell + i;
@@ -229,33 +230,39 @@ int chromo_parse(FILE *fin, struct chromo_t *c)
 {
 	size_t cgp_width;
 	size_t cgp_height;
-	size_t inputs_max;
+	size_t cgp_inputs;
 	size_t cgp_outputs;
+	size_t inputs_max;
+	size_t outputs_max;
 
 	// check chromosome compatibility
 	if(fscanf(fin, "%zu %zu", &cgp_width, &cgp_height) != 2)
 		return 1;
 	if(cgp_width != CGP_WIDTH || cgp_height != CGP_HEIGHT)
-		return 1;
-	if(fscanf(fin, "%zu %zu", &inputs_max, &cgp_outputs) != 2)
 		return 2;
-	if(inputs_max != func_inputs_max() || cgp_outputs != CGP_OUTPUTS)
-		return 2;
+	if(fscanf(fin, "%zu %zu", &cgp_inputs, &cgp_outputs) != 2)
+		return 3;
+	if(cgp_inputs != CGP_INPUTS || cgp_outputs != CGP_OUTPUTS)
+		return 4;
+	if(fscanf(fin, "%zu %zu", &inputs_max, &outputs_max) != 2)
+		return 5;
+	if(inputs_max != func_inputs_max() || outputs_max != func_outputs_max())
+		return 6;
 
 	for(size_t i = 0; i < CGP_WIDTH * CGP_HEIGHT; ++i) {
 		struct cell_t *cell = c->cell + i;
 		if(fscanf(fin, FUNC_FMT, &cell->f) != 1)
-			return 3;
+			return 7;
 
 		for(size_t j = 0; j < func_inputs_max(); ++j) {
 			if(fscanf(fin, "%zu", &cell->inputs[j]) != 1)
-				return 4;
+				return 8;
 		}
 	}
 
 	for(size_t j = 0; j < CGP_OUTPUTS; ++j) {
 		if(fscanf(fin, "%zu", &c->outputs[j]) != 1)
-			return 5;
+			return 9;
 	}
 
 	return 0;
