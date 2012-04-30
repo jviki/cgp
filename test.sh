@@ -2,7 +2,10 @@
 
 run_cgp()
 {
-	./cgp | grep "Generation\|Success" | awk 'BEGIN {S=0} /Generation/ {G=$2} /Success/ {S=1} END {print S, G}'
+	./cgp | awk 'BEGIN {S=0} /Generation/ {G=$2}
+	                         /Success/ {S=1; for(i = 3; i <= NF; ++i)
+	                           {printf("%d%s", $i, i == NF? "\n" : " ") >> "success.chr"}}
+									 END {print S, G}'
 }
 
 run_many_cgp()
