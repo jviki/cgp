@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 		tot += f;
 		cnt += 1;
 
-		if(cnt % 250 == 0)
+		if(cnt % 100 == 0)
 			printf("\rAvarage fitness: %lf", ((double) tot) / cnt);
 		//////////////
 	}
