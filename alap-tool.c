@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 	size_t count = 0;
 
 	for(curr = alap; curr != NULL; curr = curr->next) {
-		printf("[%d ", curr->id);
+		printf("[%zu ", curr->id);
 		print_cell(curr);
 		printf("\b] ");
 		count += 1;
