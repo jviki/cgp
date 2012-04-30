@@ -41,7 +41,26 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 struct run_stats_t {
 	size_t gener;
 	fitness_t sumf;
+	int has_acceptable;
+	struct timeval start;
+	size_t start_gener;
 };
+
+void time_start(struct timeval *t)
+{
+	gettimeofday(t, NULL);
+}
+
+long ms_elapsed(const struct timeval *start)
+{
+	struct timeval end;
+	gettimeofday(&end, NULL);
+
+	long r  = (end.tv_sec - start->tv_sec) * 1000;
+	r += (end.tv_usec - start->tv_usec) / 1000;
+
+	return r;
+}
 
 void run_stats_update(struct cgp_t *cgp, struct run_stats_t *stats)
 {
@@ -51,9 +70,24 @@ void run_stats_update(struct cgp_t *cgp, struct run_stats_t *stats)
 	stats->gener += 1;
 	stats->sumf  += f;
 
-	if(stats->gener % 100 == 0) {
-		printf("\rAvarage fitness (%6.zu): %lf",
-				stats->gener, ((double) stats->sumf) / stats->gener);
+	if(!stats->has_acceptable) {
+		if(fitness_isacceptable(f)) {
+			stats->has_acceptable = 1;
+			fprintf(stderr, "\nHas acceptable result, now optimizing...\n");
+		}
+	}
+
+	if(stats->start_gener == 0) {
+		time_start(&stats->start);
+		stats->start_gener = stats->gener;
+	}
+	else if(ms_elapsed(&stats->start) > 250) {
+		long speed = 4 * (stats->gener - stats->start_gener);
+		time_start(&stats->start);
+		stats->start_gener = stats->gener;
+
+		fprintf(stderr, "\rAvarage fitness (%6.zu, %6.ld/s): %lf",
+				stats->gener, speed, ((double) stats->sumf) / stats->gener);
 	}
 }
 
@@ -73,7 +107,9 @@ int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 
 	struct run_stats_t stats = {
 		.gener = 0,
-		.sumf  = 0
+		.sumf  = 0,
+		.has_acceptable = 0,
+		.start_gener = 0
 	};
 
 	while(!cgp_done(&cgp)) {
@@ -142,6 +178,8 @@ int main(int argc, char **argv)
 		size_t g;
 		cgp_run(&g, &f, cfd);
 		fflush(cfd);
+
+		fprintf(stderr, "Elapsed: %ld s\n", ms_elapsed(&now) / 1000);
 
 		if(fitness_isacceptable(f)) {
 			gener += g;
