@@ -184,7 +184,6 @@ void cell_mut(struct cell_t *cells, size_t i, size_t what)
 	else {
 		const size_t col = i / CGP_HEIGHT;
 		port_mut(cells[i].inputs, col, what);
-		port_mut(cells[i].inputs, col, what - 1);
 	}
 }
 
