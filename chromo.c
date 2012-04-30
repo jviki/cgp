@@ -162,6 +162,7 @@ static
 void port_mut(port_t *ports, size_t col, size_t i)
 {
 	ports[i] = port_gen(col);
+	assert(ports[i] < CGP_INPUTS + col * CGP_HEIGHT * func_outputs_max());
 }
 
 static
@@ -171,11 +172,18 @@ void cell_mut(struct cell_t *cells, size_t i, size_t what)
 	assert(func_count() <= 1 || what < 1 + func_inputs_max());
 	assert(func_count() >  1 || what < func_inputs_max());
 
+	// do not mutate function if it doesn't make sense
+	// => there is only one function available
 	if(what == 0 && func_count() > 1) {
 		func_mut(&cells[i].f);
 	}
+	else if(func_count() <= 1) {
+		const size_t col = i / CGP_HEIGHT;
+		port_mut(cells[i].inputs, col, what);
+	}
 	else {
 		const size_t col = i / CGP_HEIGHT;
+		port_mut(cells[i].inputs, col, what);
 		port_mut(cells[i].inputs, col, what - 1);
 	}
 }
@@ -193,24 +201,44 @@ int run_mut(void)
 	return p < CGP_MUT_PROBABILITY;
 }
 
-void chromo_mut(struct chromo_t *c)
+static
+size_t count_all_inputs(void)
 {
 	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
-	const size_t items = CGP_OUTPUTS + cells * (1 + func_inputs_max());
+	return CGP_OUTPUTS + cells * (1 + func_inputs_max());
+}
+
+static
+size_t cell_index_from_input(size_t i)
+{
+	const size_t items_in_cell = 1 + func_inputs_max();
+	return i / items_in_cell;
+}
+
+static
+size_t index_in_cell(size_t i)
+{
+	// if there is only one function available, do not mutate it...
+	const size_t items_in_cell = func_inputs_max() + (func_count() > 1? 1 : 0);
+	return i % items_in_cell;
+}
+
+void chromo_mut(struct chromo_t *c)
+{
+	const size_t inputs = count_all_inputs();
 
 	for(size_t j = 0; j < CGP_MUTS; ++j) {
 		if(!run_mut())
 			continue;
 
-		size_t i = rndgen_range(items - 1);
+		size_t i = rndgen_range(inputs - 1);
 
 		if(i < CGP_OUTPUTS) {
 			port_mut(c->outputs, CGP_WIDTH, i);
 		}
 		else {
-			const size_t range = func_inputs_max() + (func_count() > 1? 1 : 0);
-			size_t celli = (i - CGP_OUTPUTS) / (1 + func_inputs_max());
-			size_t what  = (i - CGP_OUTPUTS) % range;
+			const size_t celli = cell_index_from_input(i - CGP_OUTPUTS);
+			const size_t what  = index_in_cell(i - CGP_OUTPUTS);
 			cell_mut(c->cell, celli, what);
 		}
 	}
