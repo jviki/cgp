@@ -168,9 +168,10 @@ static
 void cell_mut(struct cell_t *cells, size_t i, size_t what)
 {
 	assert(i < CGP_WIDTH * CGP_HEIGHT);
-	assert(what < 1 + func_inputs_max());
+	assert(func_count() <= 1 || what < func_inputs_max());
+	assert(func_count() >  1 || what < 1 + func_inputs_max());
 
-	if(what == 0) {
+	if(what == 0 && func_count() > 1) {
 		func_mut(&cells[i].f);
 	}
 	else {
@@ -201,8 +202,9 @@ void chromo_mut(struct chromo_t *c)
 			port_mut(c->outputs, CGP_WIDTH, i);
 		}
 		else {
+			const size_t range = func_inputs_max() + (func_count() > 1? 1 : 0);
 			size_t celli = (i - CGP_OUTPUTS) / (1 + func_inputs_max());
-			size_t what  = (i - CGP_OUTPUTS) % (1 + func_inputs_max());
+			size_t what  = (i - CGP_OUTPUTS) % range;
 			cell_mut(c->cell, celli, what);
 		}
 	}
