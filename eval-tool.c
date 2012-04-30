@@ -32,6 +32,9 @@ int evaluation(struct chromo_t *c)
 	uint64_t inputs[CGP_INPUTS];
 	uint64_t outputs[CGP_OUTPUTS];
 
+	uint64_t mask = CGP_OUTPUTS >= 6? 0xFFFFFFFFFFFFFFFF
+			  : (((uint64_t) 1) << (1 << CGP_OUTPUTS)) - 1;
+
 	while(!feof(stdin)) {
 		int err = read_inputs(inputs, CGP_INPUTS);
 		if(err < 0)
@@ -42,8 +45,8 @@ int evaluation(struct chromo_t *c)
 		eval_fenotype(cells, c->outputs, inputs, outputs);
 
 		for(size_t i = 0; i < CGP_OUTPUTS; ++i)
-			printf("%016" PRIx64 " -> %016" PRIx64 "\n",
-					inputs[i], outputs[i]);
+			printf("%016" PRIx64 " -> %016" PRIx64 " 0x%016" PRIx64 "\n",
+					inputs[i], outputs[i], outputs[i] & mask);
 	}
 
 	return 0;
