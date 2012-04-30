@@ -5,6 +5,7 @@
 
 #include "chromo.h"
 #include <stdio.h>
+#include <time.h>
 
 int main(int argc, char **argv)
 {
@@ -24,6 +25,7 @@ int main(int argc, char **argv)
 		return 2;
 	}
 
+	srand(time(NULL));
 	for(int i = 0; i < ccount; ++i) {
 		struct chromo_t *current = chromo_at(c, (size_t) i);
 		chromo_gen(current);
