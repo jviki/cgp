@@ -1,7 +1,13 @@
 CC = gcc
-CFLAGS  = -std=c99 -Wall -Wextra -pedantic -O2
+CFLAGS  = -std=c99 -Wall -Wextra -pedantic
 CFLAGS += -Wno-unknown-pragmas -fopenmp
 LDFLAGS = -lm -fopenmp
+
+ifdef DEBUG
+CFLAGS += -ggdb3
+else
+CFLAGS += -O2
+endif
 
 OBJ = cgp.o main.o chromo.o $(FUNC_MOD) fitness_bits64.o fenotype64.o rndgen.o alap.o bitgen.o
 FUNC_MOD ?= func_swap.o
