@@ -183,6 +183,12 @@ void cell_mut(struct cell_t *cells, size_t i, size_t what)
 static
 int run_mut(void)
 {
+	if(CGP_MUT_PROBABILITY >= 100)
+		return 1;
+
+	if(CGP_MUT_PROBABILITY <= 0)
+		return 0;
+
 	size_t p = rndgen_range(100);
 	return p < CGP_MUT_PROBABILITY;
 }
