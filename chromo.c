@@ -109,7 +109,7 @@ port_t first_port_possible(size_t col)
 		first_possible = 0;
 	else
 		first_possible = CGP_INPUTS
-			+ (col - 1) * CGP_HEIGHT * func_outputs_max();
+			+ (col - CGP_LBACK) * CGP_HEIGHT * func_outputs_max();
 
 	return first_possible;
 }
