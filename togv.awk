@@ -21,15 +21,20 @@
 
 	for(i = 0; i < IN; ++i)
 		print "i" i " [shape=circle, regular=1, style=filled, fillcolor=yellow];"
-	for(i = 0; i < OUT; ++i)
-		print "o" i " [shape=circle, regular=1, style=filled, fillcolor=red];"
 
 	color = "blue"
+	for(i = 0; i < ALL; ++i) {
+		if(i % H == 0)
+			color = color == "blue"? "green" : "blue"
+		printf "n%d [shape=box, style=filled, fillcolor=%s];\n", i, color
+	}
+
+	for(i = 0; i < OUT; ++i)
+		print "o" i " [shape=circle, regular=1, style=filled, fillcolor=red];"
 
 	for(i = 0; i < H; ++i) {
 		print "subgraph r" i " {"
 		cindex = i
-		color = color == "blue"? "green" : "blue"
 		
 		for(j = 0; j < W; ++j) {
 			s = FIRST + (i * LEN) + (j * H * LEN)
@@ -63,8 +68,6 @@ function print_cell(c, i)
 		print "# skipped n" i
 		return
 	}
-
-	printf "n%d [shape=box, style=filled, fillcolor=%s];\n", i, color
 
 	print "# " c, i, f
 	print "n" i "[label=\"n" i "::" f "\"];"
