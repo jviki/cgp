@@ -29,7 +29,7 @@ const char *x__level_as_str(int l)
 }
 
 static inline
-x__log(int level, const char *fmt, ...)
+void x__log(int level, const char *fmt, ...)
 {
 	fprintf(stderr, "[%s] ", x__level_as_str(level));
 
