@@ -123,7 +123,7 @@ port_t last_port_possible(size_t col)
 static
 port_t port_gen(size_t col)
 {
-	const size_t first_possible = first_port_possible(col);
+	const size_t first_possible = col >= CGP_WIDTH? 0 : first_port_possible(col);
 	const size_t last_possible  = last_port_possible(col);
 
 	assert(last_possible > first_possible);
