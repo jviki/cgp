@@ -64,9 +64,10 @@ int main(int argc, char **argv)
 	}
 
 	struct chromo_t *c = chromo_alloc(1);
+	int err;
 
-	if(chromo_parse(fd, c)) {
-		fprintf(stderr, "The chromosome couldn't be parsed\n");
+	if((err = chromo_parse(fd, c))) {
+		fprintf(stderr, "The chromosome couldn't be parsed: %d\n", err);
 		chromo_free(c);
 		return 2;
 	}
