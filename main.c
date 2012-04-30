@@ -44,7 +44,7 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 	}
 }
 
-int cgp_run(void)
+int cgp_run(size_t *gener, fitness_t *best_fitness)
 {
 	struct cgp_t cgp;
 
@@ -85,11 +85,11 @@ int cgp_run(void)
 		//////////////
 	}
 
+	*gener = cgp.gener;
 	printf("\nGenerations: %zu\n", cgp.gener);
 
-	fitness_t best_fitness;
-	cgp_walk_popul(&cgp, &find_best_fitness, &best_fitness);
-	printf("Best: %zu\n", best_fitness);
+	cgp_walk_popul(&cgp, &find_best_fitness, best_fitness);
+	printf("Best: %zu\n", *best_fitness);
 
 	cgp_walk_popul(&cgp, &print_chromo, &cgp);
 	cgp_fini(&cgp);
@@ -111,11 +111,24 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	size_t gener = 0;
+	size_t runs  = 0;
+
 	for(int i = 0; i < count; ++i) {
 		struct timeval now;
 		gettimeofday(&now, NULL);
 
 		srand(now.tv_usec);
-		cgp_run();
+
+		fitness_t f;
+		size_t g;
+		cgp_run(&g, &f);
+
+		if(fitness_isbest(f)) {
+			gener += g;
+			runs  += 1;
+		}
 	}
+
+	printf("Avarage generations: %zu\n", gener / runs);
 }
