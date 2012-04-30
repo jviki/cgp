@@ -13,7 +13,7 @@ ifdef OPENMP
 CFLAGS += -fopenmp -Wno-unknown-pragmas
 endif
 
-OBJ = cgp.o main.o chromo.o $(FUNC_MOD) fitness_bits64.o fenotype64.o rndgen.o alap.o bitgen.o
+OBJ = cgp.o main.o chromo.o $(FUNC_MOD) fitness_bits64.o fenotype64.o rndgen.o alap.o bitgen.o ports_set.o
 FUNC_MOD ?= func_swap.o
 
 all: cgp
@@ -21,9 +21,9 @@ cgp: $(OBJ) cgp_config.h
 
 bitgen-tool: bitgen.o bitgen-tool.o
 chromo-tool: chromo.o chromo-tool.o $(FUNC_MOD) rndgen.o
-fitness-tool: fitness-tool.o chromo.o fitness_bits64.o fenotype64.o $(FUNC_MOD) rndgen.o alap.o bitgen.o
+fitness-tool: fitness-tool.o chromo.o fitness_bits64.o fenotype64.o $(FUNC_MOD) rndgen.o alap.o bitgen.o ports_set.o
 mut-tool: mut-tool.o chromo.o $(FUNC_MOD) rndgen.o
-eval-tool: eval-tool.o chromo.o $(FUNC_MOD) fenotype64.o rndgen.o alap.o
+eval-tool: eval-tool.o chromo.o $(FUNC_MOD) fenotype64.o rndgen.o alap.o ports_set.o
 alap-tool: alap-tool.o chromo.o alap.o $(FUNC_MOD) rndgen.o ports_set.o
 
 clean:
