@@ -13,6 +13,7 @@ bitgen-tool: bitgen.o bitgen-tool.o
 chromo-tool: chromo.o chromo-tool.o $(FUNC_MOD) rndgen.o
 fitness-tool: fitness-tool.o chromo.o fitness_bits64.o fenotype64.o $(FUNC_MOD) rndgen.o alap.o bitgen.o
 mut-tool: mut-tool.o chromo.o $(FUNC_MOD) rndgen.o
+eval-tool: eval-tool.o chromo.o $(FUNC_MOD) fenotype64.o rndgen.o alap.o
 
 clean:
 	$(RM) *.o
