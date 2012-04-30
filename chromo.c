@@ -168,8 +168,8 @@ static
 void cell_mut(struct cell_t *cells, size_t i, size_t what)
 {
 	assert(i < CGP_WIDTH * CGP_HEIGHT);
-	assert(func_count() <= 1 || what < func_inputs_max());
-	assert(func_count() >  1 || what < 1 + func_inputs_max());
+	assert(func_count() <= 1 || what < 1 + func_inputs_max());
+	assert(func_count() >  1 || what < func_inputs_max());
 
 	if(what == 0 && func_count() > 1) {
 		func_mut(&cells[i].f);
