@@ -31,7 +31,7 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 {
 	FILE *cfd = (FILE *) ctx;
 
-	if(fitness_isbest(f)) {
+	if(fitness_isacceptable(f)) {
 		printf("Success: " FITNESS_FMT "\n", f);
 		chromo_print(cfd, c);
 		fputc('\n', cfd);
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 		cgp_run(&g, &f, cfd);
 		fflush(cfd);
 
-		if(fitness_isbest(f)) {
+		if(fitness_isacceptable(f)) {
 			gener += g;
 			runs  += 1;
 		}

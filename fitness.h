@@ -38,8 +38,9 @@ int fitness_cmp(const fitness_t a, const fitness_t b)
 }
 
 /**
- * Returns true when the given fitness value is the best possible.
+ * Says whether the fitness means that
+ * the fenotype will work correctly.
  */
-int fitness_isbest(fitness_t f);
+int fitness_isacceptable(fitness_t f);
 
 #endif

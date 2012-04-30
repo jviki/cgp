@@ -72,7 +72,7 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 	return 0;
 }
 
-int fitness_isbest(fitness_t f)
+int fitness_isacceptable(fitness_t f)
 {
 	return f == 0;
 }
