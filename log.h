@@ -14,10 +14,11 @@
 
 #include <stdarg.h>
 #define log_enabled(level) (LOG_MASK & (level))
-#define log(level, fmt, ...) if(log_enabled(level)) {x__log(level, fmt, __VA_ARGS);}
+#define log(level, fmt, ...) if(log_enabled(level)) {x__log(level, fmt, __VA_ARGS__);}
 #define log_call(level) if(log_enabled(level)) {x__log(level, \
 		"%s#%s:%d", __FILE__, __func__, __LINE__);}
 
+static
 const char *x__level_as_str(int l)
 {
 	switch(l) {
