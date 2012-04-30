@@ -29,22 +29,16 @@ void find_best_fitness(size_t i, const struct chromo_t *c, fitness_t f, void *ct
 
 void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 {
-	struct cgp_t *cgp = (struct cgp_t *) ctx;
+	FILE *cfd = (FILE *) ctx;
 
 	if(fitness_isbest(f)) {
-		printf("Success: ");
-		printf(FITNESS_FMT "\t", f);
-		chromo_print(stdout, c);
-		fputc('\n', stdout);
-	}
-	else if(!cgp->found_best) {
-		printf(FITNESS_FMT ": ", f);
-		chromo_print(stdout, c);
-		fputc('\n', stdout);
+		printf("Success: " FITNESS_FMT "\n", f);
+		chromo_print(cfd, c);
+		fputc('\n', cfd);
 	}
 }
 
-int cgp_run(size_t *gener, fitness_t *best_fitness)
+int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 {
 	struct cgp_t cgp;
 
@@ -91,7 +85,7 @@ int cgp_run(size_t *gener, fitness_t *best_fitness)
 	cgp_walk_popul(&cgp, &find_best_fitness, best_fitness);
 	printf("Best: %zu\n", *best_fitness);
 
-	cgp_walk_popul(&cgp, &print_chromo, &cgp);
+	cgp_walk_popul(&cgp, &print_chromo, cfd);
 	cgp_fini(&cgp);
 	return 0;
 
@@ -111,6 +105,19 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	char *cfile = "success.chr";
+	if(argc >= 3)
+		cfile = argv[2];
+
+	FILE *cfd = fopen(cfile, "w");
+	if(cfd == NULL) {
+		fprintf(stderr, "Invalid file to save best chromosomes: '%s'\n", cfile);
+		return -2;
+	}
+	else {
+		fprintf(stderr, "Saving chromosome to file: '%s'\n", cfile);
+	}
+
 	size_t gener = 0;
 	size_t runs  = 0;
 
@@ -122,7 +129,8 @@ int main(int argc, char **argv)
 
 		fitness_t f;
 		size_t g;
-		cgp_run(&g, &f);
+		cgp_run(&g, &f, cfd);
+		fflush(cfd);
 
 		if(fitness_isbest(f)) {
 			gener += g;
@@ -130,5 +138,6 @@ int main(int argc, char **argv)
 		}
 	}
 
+	fclose(cfd);
 	printf("Avarage generations: %zu\n", gener / runs);
 }
