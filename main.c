@@ -7,7 +7,7 @@
 #include "cgp_config.h"
 #include <errno.h>
 #include <stdio.h>
-#include <time.h>
+#include <sys/time.h>
 
 void handle_error(const char *msg)
 {
@@ -44,9 +44,8 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 	}
 }
 
-int main(int argc, char **argv)
+int cgp_run(void)
 {
-	srand(time(NULL));
 	struct cgp_t cgp;
 
 	if(cgp_init(&cgp)) {
@@ -87,6 +86,11 @@ int main(int argc, char **argv)
 	}
 
 	printf("\nGenerations: %zu\n", cgp.gener);
+
+	fitness_t best_fitness;
+	cgp_walk_popul(&cgp, &find_best_fitness, &best_fitness);
+	printf("Best: %zu\n", best_fitness);
+
 	cgp_walk_popul(&cgp, &print_chromo, &cgp);
 	cgp_fini(&cgp);
 	return 0;
@@ -94,4 +98,24 @@ int main(int argc, char **argv)
 error_fini:
 	cgp_fini(&cgp);
 	return 1;
+}
+
+int main(int argc, char **argv)
+{
+	int count = 1;
+	if(argc >= 2)
+		count = atoi(argv[1]);
+
+	if(count < 1) {
+		fprintf(stderr, "Invalid count of CGP evaluations, must be positive: %d\n", count);
+		return -1;
+	}
+
+	for(int i = 0; i < count; ++i) {
+		struct timeval now;
+		gettimeofday(&now, NULL);
+
+		srand(now.tv_usec);
+		cgp_run();
+	}
 }
