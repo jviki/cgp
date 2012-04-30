@@ -38,6 +38,25 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 	}
 }
 
+struct run_stats_t {
+	size_t gener;
+	fitness_t sumf;
+};
+
+void run_stats_update(struct cgp_t *cgp, struct run_stats_t *stats)
+{
+	fitness_t f;
+	cgp_walk_popul(cgp, &find_best_fitness, &f);
+
+	stats->gener += 1;
+	stats->sumf  += f;
+
+	if(stats->gener % 100 == 0) {
+		printf("\rAvarage fitness (%6.zu): %lf",
+				stats->gener, ((double) stats->sumf) / stats->gener);
+	}
+}
+
 int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 {
 	struct cgp_t cgp;
@@ -52,10 +71,10 @@ int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 		goto error_fini;
 	}
 
-	//////////////
-	fitness_t tot = 0;
-	size_t cnt = 0;
-	//////////////
+	struct run_stats_t stats = {
+		.gener = 0,
+		.sumf  = 0
+	};
 
 	while(!cgp_done(&cgp)) {
 		if(cgp_next_popul(&cgp)) {
@@ -68,15 +87,7 @@ int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 			goto error_fini;
 		}
 
-		//////////////
-		fitness_t f;
-		cgp_walk_popul(&cgp, &find_best_fitness, &f);
-		tot += f;
-		cnt += 1;
-
-		if(cnt % 100 == 0)
-			printf("\rAvarage fitness (%6.zu): %lf", cnt, ((double) tot) / cnt);
-		//////////////
+		run_stats_update(&cgp, &stats);
 	}
 
 	*gener = cgp.gener;
