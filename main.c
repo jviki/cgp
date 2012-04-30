@@ -31,13 +31,13 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 {
 	struct cgp_t *cgp = (struct cgp_t *) ctx;
 
-	if(cgp->found_best && fitness_isbest(f)) {
+	if(fitness_isbest(f)) {
 		printf("Success: ");
 		printf(FITNESS_FMT "\t", f);
 		chromo_print(stdout, c);
 		fputc('\n', stdout);
 	}
-	else {
+	else if(!cgp->found_best) {
 		printf(FITNESS_FMT ": ", f);
 		chromo_print(stdout, c);
 		fputc('\n', stdout);
