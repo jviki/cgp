@@ -53,16 +53,19 @@ void ports_add_inputs(struct ports_set_t *ports, const struct cell_t *c)
 }
 
 static
-int all_outputs_in(const struct ports_set_t *ports, const struct cell_t *cell)
+int outputs_not_in(const struct ports_set_t *set, const struct cell_t *cell)
 {
 	size_t first;
 	size_t last;
 
 	cell_outputs(cell, &first, &last);
 
-	for(size_t j = first; j <= last; ++j)
-		if(!ports_set_contain(ports, (port_t) j))
+	for(size_t j = first; j <= last; ++j) {
+		const port_t p = (port_t) j;
+
+		if(ports_set_contain(set, p))
 			return 0;
+	}
 
 	return 1;
 }
@@ -73,22 +76,22 @@ int all_outputs_in(const struct ports_set_t *ports, const struct cell_t *cell)
 
 struct cell_t *chromo_alap(const struct chromo_t *c)
 {
-	struct ports_set_t ports;
-	if(ports_set_init(&ports, ports_count()))
+	struct ports_set_t used_ports;
+	if(ports_set_init(&used_ports, ports_count()))
 		return NULL;
 
-	ports_from_chromo(&ports, c->outputs);
+	ports_from_chromo(&used_ports, c->outputs);
 	struct cell_t *alap = NULL;
 
 	for(size_t i = CGP_WIDTH * CGP_HEIGHT; i > 0; --i) {
 		struct cell_t *curr = c->cell + (i - 1);
 
-		if(all_outputs_in(&ports, curr))
+		if(!outputs_not_in(&used_ports, curr)) {
 			alap = llist_prepend(alap, curr);
-
-		ports_add_inputs(&ports, curr);
+			ports_add_inputs(&used_ports, curr);
+		}
 	}
 
-	ports_set_fini(&ports);
+	ports_set_fini(&used_ports);
 	return alap;
 }
