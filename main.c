@@ -75,7 +75,7 @@ int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 		cnt += 1;
 
 		if(cnt % 100 == 0)
-			printf("\rAvarage fitness: %lf", ((double) tot) / cnt);
+			printf("\rAvarage fitness (%6.zu): %lf", cnt, ((double) tot) / cnt);
 		//////////////
 	}
 
