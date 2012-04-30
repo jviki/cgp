@@ -19,7 +19,7 @@ int read_inputs(uint64_t *inputs, size_t count)
 				return 1;
 
 			fprintf(stderr, "Can not read input no. %zu\n", i + 1);
-			return -11;
+			return -1;
 		}
 	}
 
@@ -34,9 +34,9 @@ int evaluation(struct chromo_t *c)
 
 	while(!feof(stdin)) {
 		int err = read_inputs(inputs, CGP_INPUTS);
-		if(err == -1)
+		if(err < 0)
 			return 1;
-		if(err == 1)
+		if(err > 0)
 			return 0;
 
 		eval_fenotype(cells, c->outputs, inputs, outputs);
