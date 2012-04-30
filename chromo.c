@@ -135,7 +135,10 @@ port_t port_gen(size_t col)
 void cell_outputs(const struct cell_t *cell, port_t *first, port_t *last)
 {
 	*first = CGP_INPUTS + cell->id * func_outputs_max();
-	*last  = CGP_INPUTS + (cell->id + 1) * func_outputs_max();
+	*last  = CGP_INPUTS + (cell->id + 1) * func_outputs_max() - 1;
+
+	assert(*first <= *last);
+	assert(*last - *first + 1 == func_outputs_max());
 }
 
 void chromo_gen(struct chromo_t *c)
