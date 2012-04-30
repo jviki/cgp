@@ -179,12 +179,22 @@ void cell_mut(struct cell_t *cells, size_t i, size_t what)
 	}
 }
 
+static
+int run_mut(void)
+{
+	size_t p = rndgen_range(100);
+	return p < CGP_MUT_PROBABILITY;
+}
+
 void chromo_mut(struct chromo_t *c)
 {
 	const size_t cells = CGP_WIDTH * CGP_HEIGHT;
 	const size_t items = CGP_OUTPUTS + cells * (1 + func_inputs_max());
 
 	for(size_t j = 0; j < CGP_MUTS; ++j) {
+		if(!run_mut())
+			continue;
+
 		size_t i = rndgen_range(items - 1);
 
 		if(i < CGP_OUTPUTS) {

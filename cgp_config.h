@@ -14,6 +14,7 @@
 #define CGP_OUTPUTS 2
 #define CGP_INPUTS  2
 #define CGP_MUTS    1
+#define CGP_MUT_PROBABILITY 20 // percents
 
 #endif
 
