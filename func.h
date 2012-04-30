@@ -26,6 +26,11 @@ void func_gen(func_t *f);
 void func_mut(func_t *f);
 
 /**
+ * How many functions are possible?
+ */
+size_t func_count(void);
+
+/**
  * Evaluates the function on the given array of operands.
  * The result is stored in to dst.
  * The length of op must be `func_inputs_max()` and

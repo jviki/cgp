@@ -41,6 +41,11 @@ enum func_enum_t {
 
 #define FUNC_COUNT 6
 
+size_t func_count(void)
+{
+	return FUNC_COUNT;
+}
+
 const char *func_to_str(func_t f)
 {
 	switch((enum func_enum_t) f) {

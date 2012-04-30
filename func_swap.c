@@ -34,6 +34,10 @@ size_t func_outputs(func_t f)
 	return 2;
 }
 
+size_t func_count(void)
+{
+	return 1;
+}
 
 const char *func_to_str(func_t f)
 {
