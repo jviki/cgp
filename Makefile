@@ -4,6 +4,7 @@ LDFLAGS = -lm -fopenmp
 
 ifdef DEBUG
 CFLAGS += -ggdb3
+CFLAGS += -DLOG_MASK=1
 else
 CFLAGS += -O2
 endif

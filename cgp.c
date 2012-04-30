@@ -5,6 +5,7 @@
 
 #include "cgp.h"
 #include "cgp_config.h"
+#include "log.h"
 #include <assert.h>
 #include <string.h>
 
@@ -69,8 +70,14 @@ int priv_eval_popul(struct chromo_t *c, size_t len, fitness_t *f, int *found_bes
 
 int cgp_gen_popul(struct cgp_t *cgp)
 {
-	for(size_t i = 0; i < CGP_POPUL; ++i)
+	for(size_t i = 0; i < CGP_POPUL; ++i) {
 		chromo_gen(chromo_at(cgp->c, i));
+#if log_enabled(LOG_CGP)
+		log_call(LOG_CGP);
+		chromo_print(stderr, chromo_at(cgp->c, i));
+		fprintf(stderr, "\n");
+#endif
+	}
 
 	return priv_eval_popul(cgp->c, CGP_POPUL, cgp->f, &cgp->found_best);
 }
@@ -106,6 +113,11 @@ int cgp_next_popul(struct cgp_t *cgp)
 	for(size_t i = 1; i < CGP_POPUL - 1; ++i) {
 		chromo_copy(chromo_at(cgp->c, i), cgp->c);
 		chromo_mut(chromo_at(cgp->c,  i));
+#if log_enabled(LOG_CGP)
+		log_call(LOG_CGP);
+		chromo_print(stderr, chromo_at(cgp->c, i));
+		fprintf(stderr, "\n");
+#endif
 	}
 
 	cgp->gener += 1;
