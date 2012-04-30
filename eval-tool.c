@@ -45,7 +45,7 @@ int evaluation(struct chromo_t *c)
 		eval_fenotype(cells, c->outputs, inputs, outputs);
 
 		for(size_t i = 0; i < CGP_OUTPUTS; ++i)
-			printf("%016" PRIx64 " -> %016" PRIx64 " 0x%016" PRIx64 "\n",
+			printf("0x%016" PRIx64 " -> 0x%016" PRIx64 " 0x%016" PRIx64 "\n",
 					inputs[i], outputs[i], outputs[i] & mask);
 	}
 
