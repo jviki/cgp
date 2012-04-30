@@ -83,7 +83,7 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 	if(incorrect == 0) {
 		const size_t cur_count = count_cell_list(cells);
 
-		*value = max_count + incorrect;
+		*value = (max_count - cur_count) + incorrect;
 	}
 	else {
 		*value = max_count + incorrect;
