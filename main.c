@@ -40,7 +40,6 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 
 struct run_stats_t {
 	size_t gener;
-	fitness_t sumf;
 	int has_acceptable;
 	struct timeval start;
 	size_t start_gener;
@@ -68,14 +67,6 @@ void run_stats_update(struct cgp_t *cgp, struct run_stats_t *stats)
 	cgp_walk_popul(cgp, &find_best_fitness, &f);
 
 	stats->gener += 1;
-	stats->sumf  += f;
-
-	if(!stats->has_acceptable) {
-		if(fitness_isacceptable(f)) {
-			stats->has_acceptable = 1;
-			fprintf(stderr, "\nHas acceptable result, now optimizing...\n");
-		}
-	}
 
 	if(stats->start_gener == 0) {
 		time_start(&stats->start);
@@ -86,9 +77,17 @@ void run_stats_update(struct cgp_t *cgp, struct run_stats_t *stats)
 		time_start(&stats->start);
 		stats->start_gener = stats->gener;
 
-		fprintf(stderr, "\rAvarage fitness (%6.zu, %6.ld/s): %lf (best: %zu)",
-				stats->gener, speed, ((double) stats->sumf) / stats->gener, f);
+		fprintf(stderr, "\rBest fitness (%6.zu, %6.ld/s): %6.zu",
+				stats->gener, speed, f);
 	}
+
+	if(!stats->has_acceptable) {
+		if(fitness_isacceptable(f)) {
+			stats->has_acceptable = 1;
+			fprintf(stderr, "\nHas acceptable result %zu, now optimizing...\n", f);
+		}
+	}
+
 }
 
 int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
@@ -107,7 +106,6 @@ int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 
 	struct run_stats_t stats = {
 		.gener = 0,
-		.sumf  = 0,
 		.has_acceptable = 0,
 		.start_gener = 0
 	};
