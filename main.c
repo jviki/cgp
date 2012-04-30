@@ -86,8 +86,8 @@ void run_stats_update(struct cgp_t *cgp, struct run_stats_t *stats)
 		time_start(&stats->start);
 		stats->start_gener = stats->gener;
 
-		fprintf(stderr, "\rAvarage fitness (%6.zu, %6.ld/s): %lf",
-				stats->gener, speed, ((double) stats->sumf) / stats->gener);
+		fprintf(stderr, "\rAvarage fitness (%6.zu, %6.ld/s): %lf (best: %zu)",
+				stats->gener, speed, ((double) stats->sumf) / stats->gener, f);
 	}
 }
 
