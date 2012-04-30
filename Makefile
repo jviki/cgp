@@ -24,7 +24,7 @@ chromo-tool: chromo.o chromo-tool.o $(FUNC_MOD) rndgen.o
 fitness-tool: fitness-tool.o chromo.o fitness_bits64.o fenotype64.o $(FUNC_MOD) rndgen.o alap.o bitgen.o
 mut-tool: mut-tool.o chromo.o $(FUNC_MOD) rndgen.o
 eval-tool: eval-tool.o chromo.o $(FUNC_MOD) fenotype64.o rndgen.o alap.o
-alap-tool: alap-tool.o chromo.o alap.o $(FUNC_MOD) rndgen.o
+alap-tool: alap-tool.o chromo.o alap.o $(FUNC_MOD) rndgen.o ports_set.o
 
 clean:
 	$(RM) *.o
