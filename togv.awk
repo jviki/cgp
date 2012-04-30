@@ -20,11 +20,15 @@
 	FIRST = 7
 
 	for(i = 0; i < IN; ++i)
-		print "i" i " [shape=circle, regular=1];"
-	for(i = 0; i < ALL; ++i)
-		print "n" i " [shape=box];"
+		print "i" i " [shape=circle, regular=1, style=filled, fillcolor=yellow];"
+	color = "blue"
+	for(i = 0; i < ALL; ++i) {
+		if(i % H == 0)
+			color = color == "blue"? "green" : "blue"
+		printf "n%d [shape=box, style=filled, fillcolor=%s];\n", i, color
+	}
 	for(i = 0; i < OUT; ++i)
-		print "o" i " [shape=circle, regular=1];"
+		print "o" i " [shape=circle, regular=1, style=filled, fillcolor=red];"
 
 	for(i = 0; i < H; ++i) {
 		print "subgraph r" i " {"
