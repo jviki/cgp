@@ -68,6 +68,8 @@ int main(int argc, char **argv)
 		return 2;
 	}
 
+	fclose(fd);
+
 	if(evaluation(c)) {
 		chromo_free(c);
 		fprintf(stderr, "Error during chromosome evaluation\n");
