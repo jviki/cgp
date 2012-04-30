@@ -23,6 +23,7 @@ cgp_stat()
 	awk '{S+=$1; T+=1; if($1) {G+=$2}} END {print S, (T - S), S == 0? -1 : (G / S)}'
 }
 
+rm -f success.chr
 for i in `seq 1 16`; do
 	run_many_cgp $1 | cgp_stat
 done
