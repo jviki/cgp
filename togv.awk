@@ -19,6 +19,13 @@
 
 	FIRST = 7
 
+	for(i = 0; i < IN; ++i)
+		print "i" i " [shape=circle, regular=1];"
+	for(i = 0; i < ALL; ++i)
+		print "n" i " [shape=box];"
+	for(i = 0; i < OUT; ++i)
+		print "o" i " [shape=circle, regular=1];"
+
 	for(i = 0; i < H; ++i) {
 		print "subgraph r" i " {"
 		cindex = i
