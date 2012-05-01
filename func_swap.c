@@ -17,7 +17,7 @@ enum func_enum_t {
 
 size_t func_best_count(size_t n)
 {
-	double l = (size_t) log2(n);
+	double l = log2((double) n);
 	return n * (size_t) ceil(l);
 }
 
