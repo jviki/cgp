@@ -98,3 +98,8 @@ int fitness_isacceptable(fitness_t f)
 	const size_t max_count = CGP_WIDTH * CGP_HEIGHT;
 	return f <= max_count;
 }
+
+int fitness_isbest(fitness_t f)
+{
+	return f == 0;
+}

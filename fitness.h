@@ -43,4 +43,10 @@ int fitness_cmp(const fitness_t a, const fitness_t b)
  */
 int fitness_isacceptable(fitness_t f);
 
+/**
+ * Tests whether the fitness can not be better
+ * (it is not useful to search for non-existent
+ * better then best solution).
+ */
+int fitness_isbest(fitness_t f);
 #endif
