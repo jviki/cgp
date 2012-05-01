@@ -90,7 +90,7 @@ void run_stats_update(struct cgp_t *cgp, struct run_stats_t *stats)
 
 }
 
-int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
+int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd, struct chromo_t *basec, size_t ccount)
 {
 	struct cgp_t cgp;
 
@@ -99,7 +99,7 @@ int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd)
 		goto error_fini;
 	}
 	
-	if(cgp_gen_popul(&cgp)) {
+	if(cgp_gen_popul_from(&cgp, basec, ccount)) {
 		handle_error("gcp_gen_popul");
 		goto error_fini;
 	}
@@ -139,7 +139,25 @@ error_fini:
 	return 1;
 }
 
-int main(int argc, char **argv)
+FILE *args_output_file(int argc, char **argv)
+{
+	char *cfile = "success.chr";
+	if(argc >= 3)
+		cfile = argv[2];
+
+	FILE *cfd = fopen(cfile, "w");
+	if(cfd == NULL) {
+		fprintf(stderr, "Invalid file to save best chromosomes: '%s'\n", cfile);
+		return NULL;
+	}
+	else {
+		fprintf(stderr, "Saving chromosome to file: '%s'\n", cfile);
+	}
+
+	return cfd;
+}
+
+int args_count(int argc, char **argv)
 {
 	int count = 1;
 	if(argc >= 2)
@@ -150,18 +168,68 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	char *cfile = "success.chr";
-	if(argc >= 3)
-		cfile = argv[2];
+	return count;
+}
 
-	FILE *cfd = fopen(cfile, "w");
-	if(cfd == NULL) {
-		fprintf(stderr, "Invalid file to save best chromosomes: '%s'\n", cfile);
+struct chromo_t *args_chromos(int argc, char **argv, int *ccount)
+{
+	*ccount = 0;
+
+	if(argc >= 4)
+		*ccount = atoi(argv[3]);
+	if(*ccount < 0) {
+		fprintf(stderr, "Invalid chromosome count, must not be negative: %d\n", *ccount);
+		return NULL;
+	}
+	if(*ccount == 0)
+		return NULL;
+
+	if(*ccount > CGP_POPUL) {
+		fprintf(stderr, "Will use only %d starting chromosomes\n", CGP_POPUL);
+		*ccount = CGP_POPUL;
+	}
+
+	struct chromo_t *c = chromo_alloc((size_t) *ccount);
+	if(c == NULL) {
+		fprintf(stderr, "Failed to allocate chromosomes\n");
+		*ccount = -1;
+		return NULL;
+	}
+
+	int failed = 0;
+	for(int i = 0; i < *ccount; ++i) {
+		int err;
+		struct chromo_t *curr = chromo_at(c, (size_t) i);
+
+		if((err = chromo_parse(stdin, curr))) {
+			fprintf(stderr, "Failed to parse chromosome no. %d\n", i);
+			failed += 1;
+		}
+	}
+
+	if(failed) {
+		chromo_free(c);
+		*ccount = -failed;
+		return NULL;
+	}
+
+	return c;
+}
+
+int main(int argc, char **argv)
+{
+	int count = args_count(argc, argv);
+	if(count < 0)
+		return -1;
+
+	FILE *cfd = args_output_file(argc, argv);
+	if(cfd == NULL)
 		return -2;
-	}
-	else {
-		fprintf(stderr, "Saving chromosome to file: '%s'\n", cfile);
-	}
+
+	int ccount = 0;
+	struct chromo_t *basec = args_chromos(argc, argv, &ccount);
+	if(ccount < 0)
+		return -3;
 
 	size_t gener = 0;
 	size_t runs  = 0;
@@ -174,7 +242,7 @@ int main(int argc, char **argv)
 
 		fitness_t f;
 		size_t g;
-		cgp_run(&g, &f, cfd);
+		cgp_run(&g, &f, cfd, basec, (size_t) ccount);
 		fflush(cfd);
 
 		fprintf(stderr, "Elapsed: %ld s\n", ms_elapsed(&now) / 1000);
@@ -185,6 +253,10 @@ int main(int argc, char **argv)
 		}
 	}
 
+	if(basec != NULL)
+		chromo_free(basec);
+
 	fclose(cfd);
 	printf("Avarage generations: %zu\n", gener / runs);
+	return 0;
 }
