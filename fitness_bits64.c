@@ -86,6 +86,7 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 		*value = incorrect + max_count;
 
 	bitgen_fini(&bitgen);
+	assert(*value > 0);
 	return 0;
 }
 
