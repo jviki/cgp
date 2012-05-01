@@ -50,23 +50,10 @@ size_t count_cell_list(const struct cell_t *c)
 	return size;
 }
 
-static
-size_t get_good_count(void)
-{
-	static const size_t max_count = CGP_WIDTH * CGP_HEIGHT;
-	// for simplicity assume that CGP_INPUTS == CGP_OUTPUTS
-	const size_t best_count = func_best_count(CGP_INPUTS);
-	const size_t good_count = best_count > max_count? best_count : max_count;
-
-	return good_count;
-}
-
 int fitness_compute(const struct chromo_t *c, fitness_t *value)
 {
 	assert(CGP_INPUTS >= CGP_OUTPUTS);
-	static size_t good_count = 0;
-	if(good_count == 0)
-		good_count = get_good_count();
+	static const size_t max_count = CGP_WIDTH * CGP_HEIGHT;
 
 	struct bitgen_t bitgen;
 	if(bitgen_init(&bitgen, CGP_INPUTS))
@@ -93,11 +80,10 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 		}
 	}
 
-	*value = incorrect;
 	if(incorrect == 0)
-		*value += count_cell_list(cells) - good_count;
+		*value = max_count - count_cell_list(cells);
 	else
-		*value += good_count;
+		*value = incorrect + max_count;
 
 	bitgen_fini(&bitgen);
 	return 0;
@@ -105,14 +91,6 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 
 int fitness_isacceptable(fitness_t f)
 {
-	static size_t good_count = 0;
-	if(good_count == 0)
-		good_count = get_good_count();
-
-	return f <= good_count;
-}
-
-int fitness_isbest(fitness_t f)
-{
-	return f == 0;
+	static const size_t max_count = CGP_WIDTH * CGP_HEIGHT;
+	return f <= max_count;
 }

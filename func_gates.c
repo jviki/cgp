@@ -46,11 +46,6 @@ size_t func_count(void)
 	return FUNC_COUNT;
 }
 
-size_t func_best_count(size_t n)
-{
-	return 0;
-}
-
 const char *func_to_str(func_t f)
 {
 	switch((enum func_enum_t) f) {

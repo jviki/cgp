@@ -31,14 +31,6 @@ void func_mut(func_t *f);
 size_t func_count(void);
 
 /**
- * Returns the best achievable count of
- * such functions. If there is no limit
- * or the limit is not known, it returns
- * zero.
- */
-size_t func_best_count(size_t n);
-
-/**
  * Evaluates the function on the given array of operands.
  * The result is stored in to dst.
  * The length of op must be `func_inputs_max()` and
