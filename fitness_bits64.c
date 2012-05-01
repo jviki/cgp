@@ -93,9 +93,11 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 		}
 	}
 
-	*value = incorrect + count_cell_list(cells);
+	*value = incorrect;
 	if(incorrect == 0)
-		*value -= good_count;
+		*value += count_cell_list(cells) - good_count;
+	else
+		*value += good_count;
 
 	bitgen_fini(&bitgen);
 	return 0;
