@@ -82,6 +82,19 @@ int cgp_gen_popul(struct cgp_t *cgp)
 	return priv_eval_popul(cgp->c, CGP_POPUL, cgp->f, &cgp->found_best);
 }
 
+int cgp_gen_popul_from(struct cgp_t *cgp, struct chromo_t *c, size_t count)
+{
+	if(count == 0)
+		return cgp_gen_popul(cgp);
+
+	for(size_t i = 0; i < count && i < CGP_POPUL; ++i)
+		chromo_copy(chromo_at(cgp->c, i), chromo_at(cgp->c, i));
+	for(size_t i = count; i < CGP_POPUL; ++i)
+		chromo_gen(chromo_at(cgp->c, i));
+
+	return priv_eval_popul(cgp->c, CGP_POPUL, cgp->f, &cgp->found_best);
+}
+
 int cgp_eval_popul(struct cgp_t *cgp)
 {
 	assert(cgp->gener > 0);

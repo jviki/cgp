@@ -36,6 +36,12 @@ void cgp_fini(struct cgp_t *cgp);
 int cgp_gen_popul(struct cgp_t *cgp);
 
 /**
+ * Generates the initial population based on the given chromosomes.
+ * If zero chromosomes given the effect is the same as `cgp_gen_popul`.
+ */
+int cgp_gen_popul_from(struct cgp_t *cgp, struct chromo_t *c, size_t count);
+
+/**
  * Says true when the CGP is done.
  * The generated population must be evaluated when calling
  * this function.
