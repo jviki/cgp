@@ -49,4 +49,5 @@ int fitness_isacceptable(fitness_t f);
  * better then best solution).
  */
 int fitness_isbest(fitness_t f);
+
 #endif
