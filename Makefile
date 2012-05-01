@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS  = -std=c99 -Wall -Wextra -pedantic
-LDFLAGS = -lm -fopenmp
+LDFLAGS = -lm
 
 ifdef DEBUG
 CFLAGS += -ggdb3
@@ -11,6 +11,7 @@ endif
 
 ifdef OPENMP
 CFLAGS += -fopenmp -Wno-unknown-pragmas
+LDFLAGS += -fopenmp
 endif
 
 OBJ = cgp.o main.o chromo.o $(FUNC_MOD) fitness_bits64.o fenotype64.o rndgen.o alap.o bitgen.o ports_set.o
