@@ -6,6 +6,7 @@
 #include "func.h"
 #include "rndgen.h"
 #include <stdlib.h>
+#include <math.h>
 
 /**
  * Available functions.
@@ -13,6 +14,12 @@
 enum func_enum_t {
 	F_CMP_SWAP
 };
+
+size_t func_best_count(size_t n)
+{
+	double l = (size_t) log2(n);
+	return n * (size_t) ceil(l);
+}
 
 size_t func_inputs_max(void)
 {
