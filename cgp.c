@@ -45,7 +45,7 @@ void cgp_fini(struct cgp_t *cgp)
 
 int cgp_done(const struct cgp_t *cgp)
 {
-	return cgp->gener >= CGP_GENER;
+	return cgp->gener >= CGP_GENER || cgp->found_best;
 }
 
 static
@@ -60,7 +60,7 @@ int priv_eval_popul(struct chromo_t *c, size_t len, fitness_t *f, int *found_bes
 		if(fitness_compute(chromo_at(c, i), f + i))
 			err = 1;
 
-		if(fitness_isacceptable(f[i]))
+		if(fitness_isbest(f[i]))
 			best_chromo_found = 1;
 	}
 
