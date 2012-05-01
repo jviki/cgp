@@ -211,6 +211,7 @@ static
 size_t cell_index_from_input(size_t i)
 {
 	const size_t items_in_cell = 1 + func_inputs_max();
+	assert(items_in_cell > 0);
 	return i / items_in_cell;
 }
 
@@ -219,6 +220,7 @@ size_t index_in_cell(size_t i)
 {
 	// if there is only one function available, do not mutate it...
 	const size_t items_in_cell = func_inputs_max() + (func_count() > 1? 1 : 0);
+	assert(items_in_cell > 0);
 	return i % items_in_cell;
 }
 
