@@ -213,6 +213,7 @@ struct chromo_t *args_chromos(int argc, char **argv, int *ccount)
 		return NULL;
 	}
 
+	fprintf(stderr, "Using %d initial chromosomes\n", *ccount);
 	return c;
 }
 
