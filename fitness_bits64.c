@@ -81,7 +81,7 @@ int fitness_compute(const struct chromo_t *c, fitness_t *value)
 	}
 
 	if(incorrect == 0)
-		*value = max_count - count_cell_list(cells);
+		*value = count_cell_list(cells);
 	else
 		*value = incorrect + max_count;
 
