@@ -38,6 +38,16 @@ void print_chromo(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
 	}
 }
 
+void print_best(size_t i, const struct chromo_t *c, fitness_t f, void *ctx)
+{
+	fitness_t bestf = ((fitness_t *) ctx)[0];
+
+	if(bestf == f) {
+		chromo_print(stdout, c);
+		fputc('\n', stdout);
+	}
+}
+
 struct run_stats_t {
 	size_t gener;
 	int has_acceptable;
@@ -131,6 +141,11 @@ int cgp_run(size_t *gener, fitness_t *best_fitness, FILE *cfd, struct chromo_t *
 	printf("Best: %zu\n", *best_fitness);
 
 	cgp_walk_popul(&cgp, &print_chromo, cfd);
+
+	// print the best one, when no acceptable found
+	if(!fitness_isacceptable(*best_fitness))
+		cgp_walk_popul(&cgp, &print_best, best_fitness);
+
 	cgp_fini(&cgp);
 	return 0;
 
