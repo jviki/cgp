@@ -1,0 +1,118 @@
+Implementation of CGP
+=====================
+Autor: Jan Viktorin
+
+The application contains a modular implementation of CGP. The module
+cgp.c talks to the rest of the application through the interfaces
+func.h, chromo.h and fitness.h. Other modules implement these interfaces
+and thus define the problem that is to be solved by the CGP.
+
+Currently the only implemented problem is 'design of sorting networks'.
+
+##
+## Common usage
+##
+
+Example of an execution in one thread and using Swap&Compare primitives.
+
+   $ make
+	$ ./cgp
+
+Example of an execution with OpenMP and using Swap&Compare primitiv.
+
+   $ make OPENMP=1
+	$ ./cgp
+
+
+##
+## Advanced compilation
+##
+
+The compilation can be configured:
+ * allow OpenMP
+
+   $ make OPENMP=1
+
+ * use different primitives (cells of the CGP matrix):
+
+	$ make FUNC_MOD=<module implementing the inteface func.h>.o
+
+
+ * use different fitness implementation:
+
+    $ make FITNESS=<module implementation the interface fitness.h>.o
+
+	
+Modules:
+ 
+ * func_minmax.o    implementation of primitives And, Or, And3, Or3
+ * func_swap.o      implementation of primitives Swap&Compare
+ * func_gates.o     implementation of other gates as primitives
+ * fitness_bits64.o implementation of fitness to find a sorting network
+                    (uses 64b integers)
+
+
+##
+## Advanced execution
+##
+
+As a result of the compilation there is an executable called cgp
+that accepts three optional arguments.
+
+    $ ./cgp [runs] [output file] [chromosomes count]
+
+	 runs             ... how many times perform the evolution
+	 vystupni soubor  ... where to place the successful chromosomes
+	 pocet chromozomu ... number of chromosomes that can be read from stdin
+	                      (thus it performs an optimalization)
+
+During execution the cgp program prints the count of processed
+generations, its speed (generations per second) and the best
+fitness.
+
+  Best fitness ( 24707,  24236/s):    281
+
+When an acceptable solution is found it prints
+
+  Success: <fitness>
+
+and stores the chromosome to the output file (success.chr).
+
+The current implementation always runs until the CGP_GENER count of
+generations is reached. That happens because it tries to optimize
+the count of used primitives (as less as possible).
+This approach allows to find the best possible sorting networks.
+
+
+##
+## Configuration
+##
+
+The file cgp_config.h defines few constants that affects the CGP:
+
+  * matrix size
+  * Lback
+  * population size
+  * generations count (limit)
+  * number of inputs
+  * number of outputs
+  * number of mutations per chromsome
+  * probability of every mutation
+
+
+##
+## Utilities
+##
+
+To debug and analyze results there are few simple utilities:
+  
+  * alap-tool              loads a chromosome from stdin and prints result after ALAP
+  * fitness-tool [count]   loads a `count` of chromosomes from stdin and prints their fitness
+  * mut-tool [count]       loads a `count` of chromosomes from stdin and performs mutations
+  * eval-tool [file.chr]   evaluates a chromosome using data from stdin (emulation of the circuit)
+  * bitgen-tool [width]    generates bit vectors for the given bit `width` (possible to use as input
+                           for eval-tool)
+  * chromo-tool [count]    generates a `count` of chromosomes at random
+  * togv.awk               AWK script to convert chromosome to graphviz format
+
+	   $ head -1 success.chr | awk -f togv.awk | dot -Tpdf > success.pdf
